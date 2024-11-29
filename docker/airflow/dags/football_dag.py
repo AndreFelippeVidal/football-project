@@ -5,6 +5,11 @@ from airflow.models import Variable
 
 environment_vars = {
         "API_KEY": Variable.get("API_KEY"),
+        "PG_HOST": Variable.get("PG_HOST"),
+        "PG_PASS": Variable.get("PG_PASS"),
+        "PG_USER": Variable.get("PG_USER"),
+        "PG_PORT": Variable.get("PG_PORT"),
+        "PG_DB": Variable.get("PG_DB"),
     }
 
 # Defina os argumentos padrão para a DAG

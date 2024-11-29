@@ -20,7 +20,7 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 3. **Orquestração**:  
    Usar o **Airflow** para gerenciar o pipeline de dados. O Airflow chamará **imagens Docker personalizadas** para processar os dados.
    Note: Estaremos utilizando a versao do astronomer. terá de ser baixado para facilitar o processo.
-   Note2: no arquivo airflow settings configurado pelo astronomer, inclua sua api_key
+   Note2: no arquivo airflow settings configurado pelo astronomer, inclua sua api_key, e as configurações do postgres, como seu .env
    ```variables:
     - variable_name: API_KEY
       variable_value: <YOUR API KEY>
@@ -127,9 +127,9 @@ Note: Devido a complexidade do great expectations e a documentação esquisita, 
 Adicionar a documentação gerada do Python no MkDocs com o plugin mkdocstrings.
 
 ### TESTAR
-1 - Pendente rodar o end-to-end de inserção até o banco no airflow. funcionando local
-2 - feito isso, criar o processo do competitions para o team, com contrato no pydantic até inserção no banco
-3 - Limpar a main, tem muita coisa, jogar dentro de alguma função.
+~~1 - Pendente rodar o end-to-end de inserção até o banco no airflow. funcionando local~~
+~~2 - feito isso, criar o processo do competitions para o team, com contrato no pydantic até inserção no banco~~
+~~3 - Limpar a main, tem muita coisa, jogar dentro de alguma função.~~
 4 - partir pro dbt visto que os dados já estão na raw.
 5 - Gerar algo no streamlit  básico para visualização.
 5.1 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow

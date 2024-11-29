@@ -4,6 +4,7 @@ from contextlib import contextmanager
 import os
 from dotenv import load_dotenv
 import pandas as pd
+import logging
 
 load_dotenv()
 
@@ -20,6 +21,9 @@ class Database:
         """Estabelece a conexão com o banco de dados."""
         if not self.connection:
             try:
+                print(f'db: {self.db_name}')
+                print(f'user: {self.user}')
+                print(f'host: {self.host}')
                 self.connection = psycopg2.connect(
                     dbname=self.db_name,
                     user=self.user,
@@ -28,6 +32,7 @@ class Database:
                     port=self.port,
                     #cursor_factory=RealDictCursor  # Retorna os resultados como dicionário
                 )
+                
             except psycopg2.Error as e:
                 print(f"Erro ao conectar ao PostgreSQL: {e}")
                 raise
@@ -121,6 +126,7 @@ class Database:
             table (str): Nome da tabela.
             create_table_sql (str): Comando SQL para criar a tabela.
         """
+        logging.info("Starting table/schema validation")
         # Verifica se o schema existe
         check_schema_query = """
         SELECT EXISTS (
@@ -158,6 +164,7 @@ class Database:
 
     def insert_pandas_bulk(self, df: pd.DataFrame, table_name: str):
         """Insere os dados de um DataFrame em massa na tabela especificada"""
+        logging.info("Starting dataframe bulk load")
         try:
             # Gerar a lista de tuplas a partir do DataFrame
             records = df.values.tolist()

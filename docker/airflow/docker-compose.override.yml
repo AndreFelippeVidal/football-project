@@ -36,6 +36,6 @@ services:
 #     networks:
 #       - airflow
 
-# networks:
-#   airflow:
-#     driver: bridge
+networks:
+  airflow:
+    driver: bridge

@@ -1,13 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional
-from datetime import datetime
+from datetime import datetime, date
+from contracts.teams_contract import Team
 
-class CurrentSeason(BaseModel):
-    id: int
-    startDate: str
-    endDate: str
-    currentMatchday: int
-    # winner: Optional[Team]
 
 # Modelo para representar a área da competição
 class Area(BaseModel):
@@ -15,6 +10,13 @@ class Area(BaseModel):
     name: str
     code: str
     flag: Optional[str]
+
+class CurrentSeason(BaseModel):
+    id: int
+    start_date: date = Field(..., alias='startDate')
+    end_date: date = Field(..., alias='endDate')
+    current_matchday: int = Field(..., alias='currentMatchday')
+    winner: Optional[Team]
 
 # Modelo para representar a competição
 class Competition(BaseModel):
@@ -26,11 +28,12 @@ class Competition(BaseModel):
     emblem: str
     plan: str
     current_season: CurrentSeason = Field(..., alias='currentSeason')
-    number_of_available_seasons: int = Field(..., alias='numberOfAvailableSeasons')
-    last_updated: str = Field(..., alias='lastUpdated')
+    number_of_available_seasons: int = Field(..., alias='numberOfAvailableSeasons') 
+    last_updated: datetime = Field(..., alias='lastUpdated')
 
 # Modelo principal que representa a resposta da API
 class CompetitionsResponse(BaseModel):
     count: int
     competitions: List[Competition]
     filters: dict
+
