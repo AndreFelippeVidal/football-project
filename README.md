@@ -19,6 +19,12 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 
 3. **Orquestração**:  
    Usar o **Airflow** para gerenciar o pipeline de dados. O Airflow chamará **imagens Docker personalizadas** para processar os dados.
+   Note: Estaremos utilizando a versao do astronomer. terá de ser baixado para facilitar o processo.
+   Note2: no arquivo airflow settings configurado pelo astronomer, inclua sua api_key
+   ```variables:
+    - variable_name: API_KEY
+      variable_value: <YOUR API KEY>
+    ```
 
 4. **Governança e Qualidade**:  
    Validar os dados utilizando **Great Expectations** (ou **Pandera**) para garantir conformidade com o esquema e qualidade.
@@ -75,6 +81,10 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
      - Fluxo de dados.
      - Configuração e execução.
    - Adicionar a documentação gerada automaticamente pelo código Python utilizando o `mkdocstrings`.
+
+7. **Containerização**:
+    - Para buildar a imagem docker utilize: `docker build -t football_image . `
+    - Para testar o comando na imagem docker utilize:  `docker run --env-file .env football_image`
 
 ---
 

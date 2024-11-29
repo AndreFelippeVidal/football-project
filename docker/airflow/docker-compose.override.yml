@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  webserver:
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - AIRFLOW__CORE__DAG_DIR_LIST_INTERVAL=10  # Intervalo de verificação de diretórios em segundos
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    
+  scheduler:
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - AIRFLOW__CORE__DAG_DIR_LIST_INTERVAL=10  # Intervalo de verificação de diretórios em segundos
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+   
+
+#   minio:
+#     image: 'minio/minio:latest'
+#     hostname: minio
+#     container_name: minio
+#     ports:
+#       - '9000:9000'  
+#       - '9001:9001'
+#     volumes:
+#       - ${AIRFLOW_PROJ_DIR:-.}/mnt/data:/data
+#     environment:
+#       MINIO_ACCESS_KEY: minio
+#       MINIO_SECRET_KEY: minio123
+#       MINIO_ROOT_USER: minio
+#       MINIO_ROOT_PASSWORD: minio123
+#     command: server --console-address ":9001" /data
+#     networks:
+#       - airflow
+
+# networks:
+#   airflow:
+#     driver: bridge
