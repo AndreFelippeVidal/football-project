@@ -108,3 +108,32 @@ project/
 └── docker-compose.yml       # Orquestração dos serviços
 ```
 
+
+### NEXT STEPS
+
+1 - Integrar ao Pipeline do Airflow:
+
+Criar um DAG no Airflow que utilize a classe FootballAPI para buscar dados automaticamente.
+Configurar tasks para salvar os dados em um banco PostgreSQL.
+
+2 - Validação e Salvamento de Dados:
+
+Integrar o Great Expectations ou o Pandera para validar os dados antes de armazená-los.
+Definir o esquema do banco PostgreSQL e escrever funções de salvamento no banco.
+Note: Devido a complexidade do great expectations e a documentação esquisita, vou aguardar pra implementar depois.
+
+3 - Preparar a Documentação:
+
+Adicionar a documentação gerada do Python no MkDocs com o plugin mkdocstrings.
+
+### TESTAR
+1 - Pendente rodar o end-to-end de inserção até o banco no airflow. funcionando local
+2 - feito isso, criar o processo do competitions para o team, com contrato no pydantic até inserção no banco
+3 - Limpar a main, tem muita coisa, jogar dentro de alguma função.
+4 - partir pro dbt visto que os dados já estão na raw.
+5 - Gerar algo no streamlit  básico para visualização.
+5.1 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow
+6 - Gerar documentação com mkdocs?
+7 - Buscar mais dados na API pra suportar mais dashboards no streamlit
+8 - Implementar greatExpectations se possível
+9 - Colocar uma aba com o openai pra fazer perguntas sobre times e a propria ia responder.
