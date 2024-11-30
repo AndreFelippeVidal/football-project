@@ -9,6 +9,8 @@ models:
           - relationships:
               to: ref('stg_fb__competitions')
               field: competition_id
+      - name: competition_name
+        description: Name of the competition
       - name: teams_count
         description: The count of the teams that belongs to that competition
       - name: last_updated_in_source
