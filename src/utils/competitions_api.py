@@ -84,4 +84,10 @@ class CompetitionsProcessor(Processor):
         )
         # Verificar e criar a tabela se necessário
         self.db.validate_table_exists(self.schema, self.table, query)
+        self.db.execute_query(
+            create_queries.TRUNCATE_TABLE.format(
+                schema=self.schema,
+                table=self.table
+            )
+        )
         self.db.insert_pandas_bulk(df,f'{self.schema}.{self.table}')

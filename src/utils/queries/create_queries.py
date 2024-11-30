@@ -38,3 +38,7 @@ CREATE TABLE {schema}.{table} (
     UNIQUE (competition_id, team_id)
 );
 """
+
+TRUNCATE_TABLE = """
+truncate table {schema}.{table};
+"""
