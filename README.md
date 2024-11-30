@@ -55,7 +55,8 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 ## Etapas do Desenvolvimento
 
 1. **Configuração Inicial**:
-   - Configurar o ambiente local com Docker Compose para gerenciar os serviços (Airflow, PostgreSQL, MinIO).
+   - Configurar o ambiente local com Docker Compose para gerenciar os serviços (Airflow, MinIO).
+   - Criar um servidor postgres (Neste caso hospedamos no render pela simplicidade e ser grátis)
    - Criar um repositório Git para versionar o código e usar GitHub Actions para CI/CD.
 
 2. **Ingestão de Dados**:
@@ -67,8 +68,8 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
    - Criar queries para calcular métricas como número de gols, desempenho por time, etc.
 
 4. **Governança e Qualidade**:
-   - Usar Great Expectations para validar os dados no pipeline (esquema, tipos de dados, valores duplicados).
-   - Adicionar validações com Pandera para processamentos em Python.
+   ~~- Usar Great Expectations para validar os dados no pipeline (esquema, tipos de dados, valores duplicados).~~
+   - Adicionar contratos de dados com Pydantic para processamentos e qualidade dos dados em Python.
 
 5. **Visualização e Relatórios**:
    - Desenvolver um dashboard com Streamlit que exibe métricas calculadas.
@@ -91,21 +92,24 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 ## Estrutura de Diretórios
 
 ```plaintext
-project/
-├── dags/                    # DAGs do Airflow
+project/                   
 ├── dbt/                     # Configuração e modelos dbt
 ├── docker/                  # Dockerfiles para diferentes componentes
 │   ├── airflow/             # Configuração do Airflow
-│   ├── python/              # Imagem personalizada para Python
+│   │   ├── dags/            # DAGs do Airflow
 ├── docs/                    # Arquivos de documentação (MkDocs)
 ├── src/                     # Código-fonte Python
-│   ├── ingestion/           # Scripts para ingestão de dados
-│   ├── transformations/     # Processamentos e validações
+│   ├── contracts/           # Contratos de Dados
+│   ├── utils/               # Bibliotecas e utilitários de python
 │   ├── visualization/       # Código Streamlit
+│   ├── main.py              # Python main code
 ├── tests/                   # Testes automatizados (pytest)
-├── poetry.lock        # Gerado pelo Poetry
+├── .env                     # Environment Variables
+├── pytest.ini               # Minor Pytest configurations
+├── poetry.lock              # Gerado pelo Poetry
 ├── pyproject.toml           # Configuração do Poetry
-└── docker-compose.yml       # Orquestração dos serviços
+└── Dockerfile.file          # Python Image to be used in Airflow
+
 ```
 
 
