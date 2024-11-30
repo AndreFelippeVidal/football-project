@@ -93,7 +93,7 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 
 ```plaintext
 project/                   
-├── dbt/                     # Configuração e modelos dbt
+├── dbt_football/                     # Configuração e modelos dbt
 ├── docker/                  # Dockerfiles para diferentes componentes
 │   ├── airflow/             # Configuração do Airflow
 │   │   ├── dags/            # DAGs do Airflow

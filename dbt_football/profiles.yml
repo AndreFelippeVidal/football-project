@@ -1,0 +1,12 @@
+dbt_football:
+  outputs:
+    dev:
+      dbname: football_db_v5as
+      host: dpg-ct4ike9u0jms73a8mtf0-a.oregon-postgres.render.com
+      pass: my4WcwYd7eJ5ulXNhBiBal7j1kW0uQHd
+      port: 5432
+      schema: raw
+      threads: 1
+      type: postgres
+      user: football_user
+  target: dev

@@ -1,0 +1,85 @@
+models:
+  - name: mart_fbs__competitions
+    description: Competitions overview data mart, offering one row per competition with some summarized values.
+    columns:
+      - name: competition_id
+        description: The foreign key relating to the competition who the data belongs to.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_fb__competitions')
+              field: competition_id
+      - name: teams_count
+        description: The count of the teams that belongs to that competition
+      - name: last_updated_in_source
+        description: The timestamp the competition was last updated.
+
+unit_tests:
+  - name: test_campeonato_brasileiro_team_count
+    description: "Test that the counts of teams that belongs to campeonato brasileiro."
+    model: mart_fbs__competitions
+    given:
+      - input: ref('stg_fb__teams')
+        rows:
+          - {
+              competition_id: 2013,
+              team_id: 1
+            }
+          - {
+              competition_id: 2013,
+              team_id: 2
+            }
+          - {
+              competition_id: 2013,
+              team_id: 3
+            }
+      - input: ref('stg_fb__competitions')
+        rows:
+          - { 
+              competition_id: 2013,
+              competition_name: 'Campeonato Brasileiro' 
+            }
+    expect:
+      rows:
+        - {
+            competition_id: 2013,
+            competition_name: 'Campeonato Brasileiro',
+            teams_count: 3,
+          }
+
+# semantic_models:
+#   - name: competitions
+#     defaults:
+#       agg_time_dimension: last_updated_in_source
+#     # description: |
+#     #   Order fact table. This table is at the order grain with one row per order.
+#     model: ref('mart_fbs__competitions')
+#     entities:
+#       - name: competition_id
+#         type: primary
+#     dimensions:
+#       - name: last_updated_in_source
+#         expr: last_updated_in_source
+#         type: time
+#         type_params:
+#           time_granularity: day
+#       - name: competition_name_dim
+#         type: categorical
+#         expr: competition_name
+#     measures:
+#       - name: teams_count
+#         description: The count of teams that belongs to the competition.
+#         agg: count
+#         expr: 1
+#       # - name: order_count
+#       #   expr: 1
+#       #   agg: sum
+
+# metrics:
+#   - name: teams_count
+#     description: Count of total teams that belongs to a competition.
+#     type: simple
+#     label: Team Count
+#     type_params:
+#       measure: teams_count
+ 
