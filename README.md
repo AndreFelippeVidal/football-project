@@ -73,7 +73,10 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 
 5. **Visualização e Relatórios**:
    - Desenvolver um dashboard com Streamlit que exibe métricas calculadas.
-   - Criar um DAG no Airflow para exportar relatórios para o MinIO.
+   Note: Para executar o streamlit são necessários dois passos:
+    1. Criar a imagem estando na raiz do projeto: `docker build -f docker/streamlit/Dockerfile -t streamlit-app .`
+    2. Executar a imagem e acessar via `localhost:8501`: `docker run --env-file .env -p 8501:8501 streamlit-app`
+   - Criar uma task na DAG no Airflow para exportar relatórios para o MinIO.
 
 6. **Documentação**:
    - Usar MkDocs para documentar:
@@ -84,8 +87,7 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
    - Adicionar a documentação gerada automaticamente pelo código Python utilizando o `mkdocstrings`.
 
 7. **Containerização**:
-    - Para buildar a imagem docker utilize: `docker build -t football_image . `
-    - Para testar o comando na imagem docker utilize:  `docker run --env-file .env football_image`
+    - Adicionar automatção com taskipy para buildar imagens docker: `task build_docker_images`
 
 ---
 
@@ -93,10 +95,12 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 
 ```plaintext
 project/                   
-├── dbt_football/                     # Configuração e modelos dbt
+├── dbt_football/            # Configuração e modelos dbt
 ├── docker/                  # Dockerfiles para diferentes componentes
 │   ├── airflow/             # Configuração do Airflow
 │   │   ├── dags/            # DAGs do Airflow
+│   ├── streamlit/           # Dockerfile do streamlit
+│   ├── python/              # Dockerfile do código python
 ├── docs/                    # Arquivos de documentação (MkDocs)
 ├── src/                     # Código-fonte Python
 │   ├── contracts/           # Contratos de Dados
@@ -107,37 +111,19 @@ project/
 ├── .env                     # Environment Variables
 ├── pytest.ini               # Minor Pytest configurations
 ├── poetry.lock              # Gerado pelo Poetry
-├── pyproject.toml           # Configuração do Poetry
-└── Dockerfile.file          # Python Image to be used in Airflow
+└── pyproject.toml           # Configuração do Poetry
 
 ```
 
 
 ### NEXT STEPS
-
-1 - Integrar ao Pipeline do Airflow:
-
-Criar um DAG no Airflow que utilize a classe FootballAPI para buscar dados automaticamente.
-Configurar tasks para salvar os dados em um banco PostgreSQL.
-
-2 - Validação e Salvamento de Dados:
-
-Integrar o Great Expectations ou o Pandera para validar os dados antes de armazená-los.
-Definir o esquema do banco PostgreSQL e escrever funções de salvamento no banco.
-Note: Devido a complexidade do great expectations e a documentação esquisita, vou aguardar pra implementar depois.
-
-3 - Preparar a Documentação:
-
-Adicionar a documentação gerada do Python no MkDocs com o plugin mkdocstrings.
-
-### TESTAR
 ~~1 - Pendente rodar o end-to-end de inserção até o banco no airflow. funcionando local~~
 ~~2 - feito isso, criar o processo do competitions para o team, com contrato no pydantic até inserção no banco~~
 ~~3 - Limpar a main, tem muita coisa, jogar dentro de alguma função.~~
-4 - partir pro dbt visto que os dados já estão na raw.
-5 - Gerar algo no streamlit  básico para visualização.
+~~4 - partir pro dbt visto que os dados já estão na raw.~~
+~~5 - Gerar algo no streamlit  básico para visualização.~~
 5.1 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow
 6 - Gerar documentação com mkdocs?
 7 - Buscar mais dados na API pra suportar mais dashboards no streamlit
 8 - Implementar greatExpectations se possível
-9 - Colocar uma aba com o openai pra fazer perguntas sobre times e a propria ia responder.
+9 - Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria ia responder.

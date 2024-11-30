@@ -20,7 +20,19 @@ dbt-postgres = "^1.8.2"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 pytest-mock = "^3.14.0"
+taskipy = "^1.14.1"
+
+
+[tool.poetry.group.app.dependencies]
+streamlit = "^1.40.2"
+pandas = "^2.2.3"
+psycopg2-binary = "^2.9.10"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.taskipy.tasks]
+build_docker_images = "docker build -f docker/python/Dockerfile -t football_image . && docker build -f docker/streamlit/Dockerfile -t streamlit-app ."
+
