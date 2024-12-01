@@ -122,6 +122,8 @@ project/
 ~~3 - Limpar a main, tem muita coisa, jogar dentro de alguma função.~~
 ~~4 - partir pro dbt visto que os dados já estão na raw.~~
 ~~5 - Gerar algo no streamlit  básico para visualização.~~
+5.01 - Precisa tirar as variáveis do profiles e utilizar as variáveis de ambiente, testar antes de continuar com qualquer outra coisa
+5.02 - rodar dbt no airflow com cosmos (rever jornada de dados)
 5.1 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow
 6 - Gerar documentação com mkdocs?
 7 - Buscar mais dados na API pra suportar mais dashboards no streamlit

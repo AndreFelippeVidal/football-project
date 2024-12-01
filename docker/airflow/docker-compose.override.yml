@@ -13,10 +13,11 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
       - /var/run/docker.sock:/var/run/docker.sock
+      # mount the dbt directory as a volume
+      - ./dbt:/usr/local/airflow/dbt
     environment:
       - AIRFLOW__CORE__DAG_DIR_LIST_INTERVAL=10  # Intervalo de verificação de diretórios em segundos
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
-   
 
 #   minio:
 #     image: 'minio/minio:latest'

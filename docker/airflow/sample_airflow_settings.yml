@@ -1,0 +1,22 @@
+airflow:
+  connections:
+    - conn_id: render_postgres_connection
+      conn_type: postgres
+      conn_host: <YOUR_HOST>
+      conn_schema: <YOUR_DB>
+      conn_login: <YOUR_USER>
+      conn_password: <YOUR_PASSWORD>
+      conn_port: 5432
+  variables:
+    - variable_name: API_KEY
+      variable_value: <YOUR_API_KEY>
+    - variable_name: PG_HOST
+      variable_value: <YOUR_HOST>
+    - variable_name: PG_DB
+      variable_value: <YOUR_DB>
+    - variable_name: PG_USER
+      variable_value: <YOUR_USER>
+    - variable_name: PG_PASS
+      variable_value: <YOUR_PASSWORD>
+    - variable_name: PG_PORT
+      variable_value: 5432
