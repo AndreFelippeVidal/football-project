@@ -1,4 +1,3 @@
-from airflow import DAG
 from airflow.decorators import dag
 from airflow.models import Variable
 from airflow.providers.docker.operators.docker import DockerOperator
@@ -26,14 +25,6 @@ default_args = {
     'retries': 0,
 }
 
-# dag = DAG(
-#     'futebol_pipeline',
-#     default_args=default_args,
-#     schedule_interval=None,  # Defina o intervalo de execução
-#     catchup=False,
-#     max_active_runs=1,
-# )
-
 @dag(
     schedule_interval=None,
     default_args=default_args,
@@ -44,7 +35,7 @@ default_args = {
 def futebol_pipeline() -> None:
 
     docker_task_competitions = DockerOperator(
-        task_id='run_futebol_pipeline_competitions',  # Nome da task
+        task_id='run_footbal_pipeline_competitions',  # Nome da task
         image='football_image',     # Nome da imagem Docker local
         api_version='auto',
         auto_remove=True,  # Remove o container após a execução
@@ -57,7 +48,7 @@ def futebol_pipeline() -> None:
 
     # Defina a task DockerOperator
     docker_task_teams = DockerOperator(
-        task_id='run_futebol_pipeline_teams',  # Nome da task
+        task_id='run_football_pipeline_teams',  # Nome da task
         image='football_image',     # Nome da imagem Docker local
         api_version='auto',
         auto_remove=True,  # Remove o container após a execução
