@@ -66,6 +66,10 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 3. **Transformação de Dados**:
    - Configurar dbt para criar tabelas de staging, camada intermediária e marts no PostgreSQL.
    - Criar queries para calcular métricas como número de gols, desempenho por time, etc.
+   Note: Para exportar as variáveis de ambiente para que o dbt consiga utilizar, é necessário utilizar o comando abaixo:
+   `export $(cat .env | xargs)`
+   ~~Note2: A primeira vez executando o pipeline do zero, é valido rodar um dbt run para criar todas as views/tableas primeiro na tabela final, pois existem relações entre as tabelas que podem falhar no pipeline caso todas não existam ainda. Pode-se executar local antes de subir para rodar via airflow.~~ (Fixed)
+
 
 4. **Governança e Qualidade**:
    ~~- Usar Great Expectations para validar os dados no pipeline (esquema, tipos de dados, valores duplicados).~~
@@ -122,9 +126,9 @@ project/
 ~~3 - Limpar a main, tem muita coisa, jogar dentro de alguma função.~~
 ~~4 - partir pro dbt visto que os dados já estão na raw.~~
 ~~5 - Gerar algo no streamlit  básico para visualização.~~
-5.01 - Precisa tirar as variáveis do profiles e utilizar as variáveis de ambiente, testar antes de continuar com qualquer outra coisa
-5.02 - rodar dbt no airflow com cosmos (rever jornada de dados)
-5.1 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow
+~~5.01 - Precisa tirar as variáveis do profiles e utilizar as variáveis de ambiente, testar antes de continuar com qualquer outra coisa~~
+~~5.02 - rodar dbt no airflow com cosmos (rever jornada de dados)~~
+5.03 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow
 6 - Gerar documentação com mkdocs?
 7 - Buscar mais dados na API pra suportar mais dashboards no streamlit
 8 - Implementar greatExpectations se possível

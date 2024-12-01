@@ -1,12 +1,12 @@
 dbt_football:
   outputs:
     dev:
-      dbname: football_db_v5as
-      host: dpg-ct4ike9u0jms73a8mtf0-a.oregon-postgres.render.com
-      pass: my4WcwYd7eJ5ulXNhBiBal7j1kW0uQHd
+      dbname: "{{ env_var('PG_DB') }}"
+      host: "{{ env_var('PG_HOST') }}"
+      pass: "{{ env_var('PG_PASS') }}"
       port: 5432
-      schema: raw
-      threads: 1
+      schema: "{{ env_var('PG_SCHEMA') }}"
+      threads: "{{ env_var('PG_THREADS') | int }}"
       type: postgres
-      user: football_user
+      user: "{{ env_var('PG_USER') }}"
   target: dev

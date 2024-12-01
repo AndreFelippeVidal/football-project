@@ -2,7 +2,7 @@ from airflow.decorators import dag
 from airflow.models import Variable
 from airflow.providers.docker.operators.docker import DockerOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from cosmos import DbtTaskGroup, ProjectConfig
+from cosmos import DbtTaskGroup, ProjectConfig, RenderConfig
 
 from include.profiles import render_postgres_db
 from include.constants import football, venv_execution_config
@@ -16,6 +16,8 @@ environment_vars = {
         "PG_USER": Variable.get("PG_USER"),
         "PG_PORT": Variable.get("PG_PORT"),
         "PG_DB": Variable.get("PG_DB"),
+        "PG_SCHEMA": Variable.get("PG_SCHEMA"),
+        "PG_THREADS": Variable.get("PG_THREADS"),
     }
 
 # Defina os argumentos padrão para a DAG
@@ -58,13 +60,26 @@ def futebol_pipeline() -> None:
         #volumes=['/src:/src'],  # Montando o diretório local para o container
         environment=environment_vars,
     )
-
+    
     dbt_transformations = DbtTaskGroup(
-            group_id="dbt_football_project",
-            project_config=ProjectConfig(football),
-            profile_config=render_postgres_db,
-            execution_config=venv_execution_config,
-        )
+        group_id="dbt_football_project",
+        project_config=ProjectConfig(football),
+        profile_config=render_postgres_db,
+        execution_config=venv_execution_config,
+        render_config=RenderConfig(
+            exclude=["path:models/marts"],
+        ), # Exclui os testes da execução inicial
+    )
+
+    dbt_marts = DbtTaskGroup(
+        group_id="dbt_football_marts",
+        project_config=ProjectConfig(football),
+        profile_config=render_postgres_db,
+        execution_config=venv_execution_config,
+        render_config=RenderConfig(
+            select=["path:models/marts"],
+        ),  # Executa apenas os testes
+    )
 
     query_table = PostgresOperator(
             task_id="query_table",
@@ -73,6 +88,8 @@ def futebol_pipeline() -> None:
         )
 
 
-    docker_task_competitions >> docker_task_teams >> dbt_transformations >> query_table
+    docker_task_competitions >> docker_task_teams 
+    docker_task_teams >> dbt_transformations >> dbt_marts >> query_table
+    
 
 futebol_pipeline()
