@@ -25,6 +25,7 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
     - variable_name: API_KEY
       variable_value: <YOUR API KEY>
     ```
+    Note: change astro postgres port: `astro config set postgres.port 5435`
 
 4. **Governança e Qualidade**:  
    Validar os dados utilizando **Great Expectations** (ou **Pandera**) para garantir conformidade com o esquema e qualidade.
@@ -74,6 +75,7 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 4. **Governança e Qualidade**:
    ~~- Usar Great Expectations para validar os dados no pipeline (esquema, tipos de dados, valores duplicados).~~
    - Adicionar contratos de dados com Pydantic para processamentos e qualidade dos dados em Python.
+   - Implementar data lineage com open lineage e marquez. Para subir o docker do marquez, navegar até `docker/marquez` e executar: `./docker/up.sh`
 
 5. **Visualização e Relatórios**:
    - Desenvolver um dashboard com Streamlit que exibe métricas calculadas.

@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  api:
+    image: "marquezproject/marquez:${TAG}"
+    container_name: marquez-api
+    environment:
+      - MARQUEZ_PORT=${API_PORT}
+      - MARQUEZ_ADMIN_PORT=${API_ADMIN_PORT}
+      - POSTGRES_HOST=db
+      - SEARCH_ENABLED=${SEARCH_ENABLED}
+    ports:
+      - "${API_PORT}:${API_PORT}"
+      - "${API_ADMIN_PORT}:${API_ADMIN_PORT}"
+    volumes:
+      - data:/opt/marquez
+    links:
+      - "db:postgres"
+    depends_on:
+      - db
+    entrypoint: ["/opt/marquez/wait-for-it.sh", "db:${POSTGRES_PORT}", "--", "./entrypoint.sh"]
+
+  db:
+    image: postgres:14
+    container_name: marquez-db
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - MARQUEZ_DB=marquez
+      - MARQUEZ_USER=marquez
+      - MARQUEZ_PASSWORD=marquez
+    volumes:
+      - db-conf:/etc/postgresql
+      - db-init:/docker-entrypoint-initdb.d
+      - db-backup:/var/lib/postgresql/data
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    # Enables SQL statement logging (see: https://www.postgresql.org/docs/12/runtime-config-logging.html#GUC-LOG-STATEMENT)
+    # command: ["postgres", "-c", "log_statement=all"]
+
+volumes:
+  data:
+  db-conf:
+  db-init:
+  db-backup:

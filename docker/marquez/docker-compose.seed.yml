@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  seed_marquez:
+    image: "marquezproject/marquez:${TAG}"
+    container_name: seed-marquez-with-metadata
+    environment:
+      - MARQUEZ_URL=http://api:${API_PORT}
+      - SEARCH_ENABLED=false
+    volumes:
+      - ./docker/wait-for-it.sh:/usr/src/app/wait-for-it.sh
+      - ./docker/seed.sh:/usr/src/app/seed.sh
+      - ./docker/metadata.template.json:/usr/src/app/metadata.template.json
+    links:
+      - "db:postgres"
+    depends_on:
+      - api
+    entrypoint: ["./wait-for-it.sh", "api:${API_PORT}", "--timeout=120", "--", "./seed.sh"]

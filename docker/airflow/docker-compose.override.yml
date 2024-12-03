@@ -18,7 +18,7 @@ services:
     environment:
       - AIRFLOW__CORE__DAG_DIR_LIST_INTERVAL=10  # Intervalo de verificação de diretórios em segundos
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
-
+  
 #   minio:
 #     image: 'minio/minio:latest'
 #     hostname: minio
