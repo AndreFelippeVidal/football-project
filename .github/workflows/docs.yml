@@ -1,0 +1,30 @@
+name: Deploy MkDocs to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install Poetry
+      run: |
+        pip install "poetry==1.8.3"
+    - name: Install dependencies
+      run: |
+        poetry config virtualenvs.in-project true && poetry install --only docs --no-root
+    - name: Build documentation
+      run: |
+        poetry run mkdocs build
+    - run: ls -la
+    - name: Deploy to GitHub Pages
+      run: |
+        poetry run mkdocs gh-deploy --force
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

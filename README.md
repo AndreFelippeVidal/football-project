@@ -130,7 +130,7 @@ project/
 ~~5 - Gerar algo no streamlit  básico para visualização.~~
 ~~5.01 - Precisa tirar as variáveis do profiles e utilizar as variáveis de ambiente, testar antes de continuar com qualquer outra coisa~~
 ~~5.02 - rodar dbt no airflow com cosmos (rever jornada de dados)~~
-5.03 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow
+~~5.03 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow~~
 6 - Gerar documentação com mkdocs?
 7 - Buscar mais dados na API pra suportar mais dashboards no streamlit
 8 - Implementar greatExpectations se possível
