@@ -28,7 +28,7 @@ def team_summary():
     except Exception as e:
         st.error(f"Erro ao conectar no PostgreSQL: {e}")
 
-    st.sidebar.header("Filtros")
+    st.sidebar.header("Filters")
     
     # Dropdown de competição
     selected_competition = st.sidebar.selectbox("Selecione a Competição", 
@@ -53,6 +53,15 @@ def team_summary():
                       from staging.stg_fb__players where team_id = {team_id}
                     order by 1"""
         df_team_players = pd.read_sql(query, conn)
+    except Exception as e:
+        st.error(f"Erro ao conectar no PostgreSQL: {e}")
+
+    try:
+        conn = get_connection()
+        query = f"""select competition_name, competition_type, competition_emblem
+                      from staging.stg_fb__running_competitions where team_id = {team_id}
+                    order by 1"""
+        df_team_running_competitions = pd.read_sql(query, conn)
     except Exception as e:
         st.error(f"Erro ao conectar no PostgreSQL: {e}")
 
@@ -87,7 +96,19 @@ def team_summary():
             unsafe_allow_html=True
             )
     
-    st.dataframe(df_team_players,use_container_width=True,hide_index=True)
+    df_col1, df_col2 = st.columns(2)
+    with df_col1:
+        st.dataframe(df_team_players,use_container_width=True,hide_index=True)
+    with df_col2:
+        st.dataframe(df_team_running_competitions,
+                    use_container_width=True,
+                    hide_index=True,
+                    column_config={
+                            "competition_emblem": st.column_config.ImageColumn(
+                                "Competition Emblem"
+                            )
+                    },
+        )
 
 
 # Função principal para controle da navegação
