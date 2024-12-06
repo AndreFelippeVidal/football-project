@@ -1,5 +1,5 @@
  
-# Projeto de Portfólio de Engenharia de Dados - # FOOTBALL PROJECT
+# FOOTBALL PROJECT
 
 ---
 
@@ -123,15 +123,16 @@ project/
 
 
 ### NEXT STEPS
-~~1 - Pendente rodar o end-to-end de inserção até o banco no airflow. funcionando local~~
-~~2 - feito isso, criar o processo do competitions para o team, com contrato no pydantic até inserção no banco~~
-~~3 - Limpar a main, tem muita coisa, jogar dentro de alguma função.~~
-~~4 - partir pro dbt visto que os dados já estão na raw.~~
-~~5 - Gerar algo no streamlit  básico para visualização.~~
-~~5.01 - Precisa tirar as variáveis do profiles e utilizar as variáveis de ambiente, testar antes de continuar com qualquer outra coisa~~
-~~5.02 - rodar dbt no airflow com cosmos (rever jornada de dados)~~
-~~5.03 - Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow~~
-6 - Gerar documentação com mkdocs?
-7 - Buscar mais dados na API pra suportar mais dashboards no streamlit
-8 - Implementar greatExpectations se possível
-9 - Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria ia responder.
+
+1. ~~Pendente rodar o end-to-end de inserção até o banco no airflow. funcionando local~~
+2. ~~feito isso, criar o processo do competitions para o team, com contrato no pydantic até inserção no banco~~
+3. ~~ Limpar a main, tem muita coisa, jogar dentro de alguma função.~~
+4. ~~partir pro dbt visto que os dados já estão na raw.~~
+5. ~~Gerar algo no streamlit  básico para visualização.~~
+6. ~~Precisa tirar as variáveis do profiles e utilizar as variáveis de ambiente, testar antes de continuar com qualquer outra coisa~~
+7. ~~rodar dbt no airflow com cosmos (rever jornada de dados)~~
+8. ~~ Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow~~
+9. ~~Gerar documentação com mkdocs? (the build is failing because the repo is private, once moved to public it will work)~~
+10. Buscar mais dados na API pra suportar mais dashboards no streamlit
+11. Implementar greatExpectations se possível
+12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria ia responder.

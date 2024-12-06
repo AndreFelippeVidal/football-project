@@ -1,3 +1,9 @@
+"""
+This module contains classes and methods for interacting with football competitions APIs 
+and processing the retrieved data. It includes functionality for retrieving competition 
+details, matches, and storing processed data into a PostgreSQL database.
+"""
+
 from typing import Dict, Any
 import pandas as pd
 import json
@@ -12,27 +18,58 @@ from contracts.competitions_contract import CompetitionsResponse
 
 
 class CompetitionsAPI(FootballAPIBase):
+    """
+    Handles API interactions for retrieving football competition data.
+    """
     def get_competitions(self, plan: str = "TIER_ONE") -> Dict[str, Any]:
         """
-        Retorna todas as competições disponíveis.
-        :param plan: Nível da competição (ex.: TIER_ONE, TIER_TWO)
+        Retrieves all available competitions based on the specified plan.
+
+        Args:
+            plan (str): Competition tier (e.g., TIER_ONE, TIER_TWO).
+
+        Returns:
+            Dict[str, Any]: A dictionary containing competition data.
         """
         return self._make_request("competitions", params={"plan": plan})
 
     def get_competition_by_id(self, competition_id: int) -> Dict[str, Any]:
         """
-        Retorna detalhes de uma competição específica.
+        Retrieves details for a specific competition.
+
+        Args:
+            competition_id (int): The unique ID of the competition.
+
+        Returns:
+            Dict[str, Any]: A dictionary containing the competition details.
         """
         return self._make_request(f"competitions/{competition_id}")
 
     def get_matches(self, competition_id: int) -> Dict[str, Any]:
         """
-        Retorna as partidas de uma competição específica.
+        Retrieves all matches for a specific competition.
+
+        Args:
+            competition_id (int): The unique ID of the competition.
+
+        Returns:
+            Dict[str, Any]: A dictionary containing match data.
         """
         return self._make_paginated_request(f"competitions/{competition_id}/matches")
     
 class CompetitionsProcessor(Processor):
-    def __init__(self, api_connection, schema = 'RAW', table = None):
+    """
+    Processes competition data fetched from the API and stores it in a database.
+    """
+    def __init__(self, api_connection: CompetitionsAPI, schema = 'RAW', table = None):
+        """
+        Initializes the CompetitionsProcessor with the API connection and database details.
+
+        Args:
+            api_connection: The API connection instance.
+            schema (str, optional): The database schema where data will be stored. Default is 'RAW'.
+            table (str, optional): The target database table. Default is None.
+        """
         super().__init__(api_connection, self.__class__.__name__)
 
         if schema:
@@ -49,6 +86,12 @@ class CompetitionsProcessor(Processor):
         )
 
     def process(self) -> None:
+        """
+        Processes competition data by fetching, transforming, and loading it into the database.
+
+        Returns:
+            None
+        """
         self.logger.info(f"Start Processing - {self.table}")
         self.logger.info("Dataframe from response:")
         competitions_data = CompetitionsResponse(**self.api_connection.get_competitions())
@@ -77,7 +120,15 @@ class CompetitionsProcessor(Processor):
         self._write_to_db(df_with_metadata)
 
     def _write_to_db(self, df: pd.DataFrame) -> None:
+        """
+        Writes the processed DataFrame to the specified database table.
 
+        Args:
+            df (pd.DataFrame): The processed DataFrame to be inserted into the database.
+
+        Returns:
+            None
+        """
         query = getattr(create_queries, self.table.upper()).format(
             schema=self.schema,
             table=self.table

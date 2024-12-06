@@ -34,6 +34,7 @@ mkdocs-material = "^9.5.47"
 mkdocstrings = "^0.27.0"
 mkdocs-exclude = "^1.0.2"
 markdown-include = "^0.8.1"
+mkdocstrings-python = "^1.12.2"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,3 +1,7 @@
+"""
+This module provides classes for interacting with and processing team data 
+from a football API, including fetching team details and integrating them into a database.
+"""
 from utils.football_api import FootballAPIBase
 from typing import Dict, Any
 import pandas as pd
@@ -14,20 +18,60 @@ from contracts.teams_contract import TeamsResponse
 pd.set_option('display.max_colwidth', None)
 
 class TeamsAPI(FootballAPIBase):
+    """
+    Handles API interactions for fetching team-related data.
+
+    Methods:
+        - get_teams: Fetches teams of a specific competition.
+        - get_team_by_id: Fetches details of a specific team.
+    """
     def get_teams(self, competition_id: int) -> Dict[str, Any]:
         """
-        Retorna os times de uma competição específica.
+        Fetches teams participating in a specific competition.
+
+        Args:
+            competition_id (int): The ID of the competition to fetch teams from.
+
+        Returns:
+            Dict[str, Any]: The API response containing team details.
         """
         return self._make_request(f"competitions/{competition_id}/teams")
 
     def get_team_by_id(self, team_id: int) -> Dict[str, Any]:
         """
-        Retorna detalhes de um time específico.
+        Fetches details of a specific team.
+
+        Args:
+            team_id (int): The ID of the team to fetch details for.
+
+        Returns:
+            Dict[str, Any]: The API response containing the team's details.
         """
         return self._make_request(f"teams/{team_id}")
 
 class TeamsProcessor(Processor):
-    def __init__(self, api_connection, competition_ids: list, schema = 'RAW', table = None):
+    """
+    Processes and integrates team data from the API into the database.
+
+    Attributes:
+        api_connection: The API connection used for fetching data.
+        competition_ids (list): List of competition IDs for which to process teams.
+        schema (str): Database schema to use.
+        table (str): Database table to insert data into.
+
+    Methods:
+        - process: Fetches, transforms, and loads team data into the database.
+    """
+    def __init__(self, api_connection: TeamsAPI, competition_ids: list, schema = 'RAW', table = None):
+        """
+        Initializes the TeamsProcessor.
+
+        Args:
+            api_connection: The API connection used for fetching data.
+            competition_ids (list): List of competition IDs to process.
+            schema (str, optional): The schema to use in the database. Defaults to 'RAW'.
+            table (str, optional): The table to insert data into. Defaults to None.
+        """
         super().__init__(api_connection, self.__class__.__name__)
 
         if schema:
@@ -46,6 +90,10 @@ class TeamsProcessor(Processor):
         )
 
     def process(self) -> None:
+        """
+        Processes team data by fetching it from the API, transforming it, 
+        and loading it into the database.
+        """
         self.logger.info(f"Start Processing - {self.table}")
 
         teams_data = []
@@ -91,6 +139,12 @@ class TeamsProcessor(Processor):
         self._write_to_db(df_with_metadata)
 
     def _write_to_db(self, df: pd.DataFrame) -> None:
+        """
+        Writes the processed DataFrame to the database.
+
+        Args:
+            df (pd.DataFrame): The DataFrame to write to the database.
+        """
 
         query = getattr(create_queries, self.table.upper()).format(
             schema=self.schema,
