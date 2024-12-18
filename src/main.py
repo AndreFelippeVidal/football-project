@@ -1,5 +1,5 @@
 import click
-from utils.competitions_api import CompetitionsAPI, CompetitionsProcessor
+from utils.competitions_api import CompetitionsAPI, CompetitionsProcessor, CompetitionsDetailsProcessor
 from utils.teams_api import TeamsAPI, TeamsProcessor
 from contracts.teams_contract import TeamsResponse
 from dotenv import load_dotenv
@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 @click.command()
-@click.option('--request_type', type=click.Choice(['teams', 'competitions'], case_sensitive=False), help="Tipo de requisição a ser feita")
+@click.option('--request_type', type=click.Choice(['teams', 'competitions','competitions_standings'], case_sensitive=False), help="Tipo de requisição a ser feita")
 def main(request_type):
     """
     Função principal que direciona a requisição com base no parâmetro passado via CLI.
@@ -18,6 +18,12 @@ def main(request_type):
     elif request_type == 'competitions':
         competitions_api = CompetitionsAPI(token=None)
         CompetitionsProcessor(competitions_api, schema='raw', table='competitions').process()
+    elif request_type == 'competitions_standings':
+        competitions_standings_api = CompetitionsAPI(token=None)
+        CompetitionsDetailsProcessor(competitions_standings_api, schema='raw', table='competitions_standings').process()
+    elif request_type == 'competitions_top_scorers':
+        competitions_top_scorers_api = CompetitionsAPI(token=None)
+        CompetitionsDetailsProcessor(competitions_top_scorers_api, schema='raw', table='competitions_top_scorers').process()
         
     else:
         print("Tipo de requisição inválido!")

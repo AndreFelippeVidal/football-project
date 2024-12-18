@@ -29,7 +29,7 @@ class FootballAPIBase:
         """
         Faz a requisição à API, garantindo que o limite de 10 requisições por minuto seja respeitado.
         """
-        MAX_RETRIES = 3
+        MAX_RETRIES = 5
         RETRY_DELAY = 6 # in seconds, (rate limit of 10 requests per minute)
         RETRY_COUNT = 0
         url = f"{self.base_url}/{endpoint}"
@@ -57,6 +57,7 @@ class FootballAPIBase:
             
             if RETRY_COUNT == MAX_RETRIES:
                 logging.error("Max retries exceeded. Unable to make API request.")
+                break
 
 
     def _make_paginated_request(self, endpoint: str, params: Dict[str, Any] = None) -> Dict[str, Any]:

@@ -39,6 +39,28 @@ CREATE TABLE {schema}.{table} (
 );
 """
 
+COMPETITIONS_STANDINGS = """
+CREATE TABLE {schema}.{table} (
+    id SERIAL PRIMARY KEY,
+    position INTEGER NOT NULL,
+    team JSONB NOT NULL,
+    played_games INTEGER NOT NULL,
+    form VARCHAR(255),
+    won INTEGER NOT NULL,
+    draw INTEGER NOT NULL,
+    lost INTEGER NOT NULL,
+    points INTEGER NOT NULL,
+    goals_for INTEGER NOT NULL,
+    goals_against INTEGER NOT NULL,
+    goal_difference INTEGER NOT NULL,
+    competition_id INTEGER NOT NULL,
+    season INTEGER NOT NULL,
+    season_info JSONB,
+    load_timestamp TIMESTAMP NOT NULL,
+    UNIQUE (competition_id, position, season)
+);
+"""
+
 TRUNCATE_TABLE = """
 truncate table {schema}.{table};
 """

@@ -136,14 +136,15 @@ project/
 10. Buscar mais dados na API pra suportar mais dashboards no streamlit (matches, scores, desempenho na temporada, estisticas de jogadores são algumas ideias, mas tem que buscar essas informações na api, o que temos até agora já está no dashboard.)
 ~~10.1 -> Adicionar os novos modelos do dbt de players e running comeptitions no airflow e testar (Automaticamente gerado pelo dbt integrado ao cosmos)~~ 
 11. Implementar greatExpectations se possível (TBD)
-12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria ia responder. (TBD)
+12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria IA responder. (TBD)
 ~~13. Colocar uma aba no streamlit com o open ai para fazer um monitoramento de data quality de cada tabela e a openai sugerir soluções.~~
+14. Observabilidade com logfire
 
 
 
 Novas requests que podem ser implementadas para analises no dashboard:
 Get the league table for Eredivisie:
-https://api.football-data.org/v4/competitions/{id}/standings
+https://api.football-data.org/v4/competitions/{id}/standings  -- Added to RAW
 
 See best 10 scorers of Italy's top league (scorers subresource defaults to limit=10):
 https://api.football-data.org/v4/competitions/SA/scorers
