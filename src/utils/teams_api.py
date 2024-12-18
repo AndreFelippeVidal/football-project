@@ -48,6 +48,18 @@ class TeamsAPI(FootballAPIBase):
             Dict[str, Any]: The API response containing the team's details.
         """
         return self._make_request(f"teams/{team_id}")
+    
+    def get_team_upcoming_matches(self, team_id: int) -> Dict[str, Any]:
+        """
+        Fetches upcoming matches of a specific team.
+
+        Args:
+            team_id (int): The ID of the team to fetch details for.
+
+        Returns:
+            Dict[str, Any]: The API response containing the team's upcoming matches details.
+        """
+        return self._make_request(f"teams/{team_id}/matches?status=SCHEDULED")
 
 class TeamsProcessor(Processor):
     """

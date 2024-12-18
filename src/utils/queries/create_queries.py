@@ -61,6 +61,45 @@ CREATE TABLE {schema}.{table} (
 );
 """
 
+COMPETITIONS_TOP_SCORERS = """
+CREATE TABLE {schema}.{table} (
+    id SERIAL PRIMARY KEY,
+    player JSONB NOT NULL,                
+    team JSONB NOT NULL,                   
+    played_matches INT,                   
+    goals INT,                            
+    assists FLOAT,                          
+    penalties FLOAT,                      
+    competition_id INT NOT NULL,          
+    season INT NOT NULL,                  
+    season_info JSONB NOT NULL,            
+    load_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
+    UNIQUE (competition_id, season, player)
+);
+"""
+
+MATCHES_TODAY = """
+CREATE TABLE {schema}.{table} (
+    area JSONB, 
+    competition JSONB, 
+    season JSONB, 
+    id BIGINT PRIMARY KEY,
+    utc_date TIMESTAMP WITH TIME ZONE,
+    status VARCHAR(50),
+    matchday INT, 
+    stage VARCHAR(50),
+    which_group VARCHAR(50), 
+    last_updated TIMESTAMP WITH TIME ZONE,
+    home_team JSONB, 
+    away_team JSONB, 
+    score JSONB, 
+    odds JSONB,
+    referees JSONB, 
+    date_from DATE,
+    load_timestamp TIMESTAMP WITH TIME ZONE
+);
+"""
+
 TRUNCATE_TABLE = """
 truncate table {schema}.{table};
 """

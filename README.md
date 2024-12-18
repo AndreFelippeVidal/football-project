@@ -146,12 +146,14 @@ Novas requests que podem ser implementadas para analises no dashboard:
 Get the league table for Eredivisie:
 https://api.football-data.org/v4/competitions/{id}/standings  -- Added to RAW
 
-See best 10 scorers of Italy's top league (scorers subresource defaults to limit=10):
+See best 10 scorers of Italy's top league (scorers subresource defaults to limit=10): -- Added to Raw
 https://api.football-data.org/v4/competitions/SA/scorers
 
 
-See todays' matches of your subscribed competitions:
+See todays' matches of your subscribed competitions: -- Streamlit home? -- Added to Raw
 https://api.football-data.org/v4/matches
 
 See all upcoming matches for Real Madrid:
 https://api.football-data.org/v4/teams/86/matches?status=SCHEDULED
+
+Pending to add the airflow part for all these new requests and also add their lineage to be handled by openLineage before dbt. 

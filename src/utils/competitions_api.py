@@ -16,6 +16,7 @@ from utils.database import Database
 from utils.queries import create_queries 
 from contracts.competitions_contract import CompetitionsResponse
 from contracts.competitions_standings_contract import CompetitionStandingsResponse
+from contracts.competitions_top_scorers_contract import TopScorersResponse
 
 pd.set_option('display.max_colwidth', None)
 
@@ -73,6 +74,21 @@ class CompetitionsAPI(FootballAPIBase):
             return self._make_request(f"competitions/{competition_id}/standings")
         else:    
             return self._make_request(f"competitions/{competition_id}/standings?season={season}")
+    
+    def get_top_scorers(self, competition_id: int, season: int = None) -> Dict[str, Any]:
+        """
+        Retrieves top scorers for a specific competition.
+
+        Args:
+            competition_id (int): The unique ID of the competition.
+
+        Returns:
+            Dict[str, Any]: A dictionary containing top scorers data.
+        """
+        if not season:
+            return self._make_request(f"competitions/{competition_id}/scorers")
+        else:    
+            return self._make_request(f"competitions/{competition_id}/scorers?season={season}")
     
 class CompetitionsProcessor(Processor):
     """
@@ -249,7 +265,54 @@ class CompetitionsDetailsProcessor(Processor):
             self._write_to_db(df_with_metadata)
         
         elif self.table == 'competitions_top_scorers':
-            pass
+            top_scorers = []
+
+            actual_year = datetime.datetime.now().year
+
+            competition_ids_result = self.db.select(table=f'{self.schema}.competitions', columns='distinct id')
+            competition_ids = [row[0] for row in competition_ids_result]
+
+            self.logger.info(f"Competition IDs Standings to be retrieved: {competition_ids}")
+            
+            for season in range(actual_year-2, actual_year+1):
+                self.logger.info(f'Retrieving data for season: {season}')
+                for competition_id in competition_ids:
+                    self.logger.info(f'Retrieving data for competition id: {competition_id}')
+                    ## For Cup competitions like FIFA World Cup/UEFA Champions League/European Championship/Libertadores different logic is needed
+                    if competition_id not in [2000,2001,2018,2152]:
+                        top_scorer_data = TopScorersResponse(**self.api_connection.get_top_scorers(competition_id=competition_id, season=season))
+                    elif season == actual_year:
+                        top_scorer_data = TopScorersResponse(**self.api_connection.get_top_scorers(competition_id=competition_id))
+                    else:
+                        continue
+                    # Convertendo para dicionário e depois criando o DataFrame
+                    top_scorers_dict = [item.model_dump() for item in top_scorer_data.scorers]
+                    df = pd.DataFrame(top_scorers_dict)
+                    df['competition_id'] = competition_id
+                    df['season'] = top_scorer_data.filters['season']
+                    df['season_info'] = top_scorer_data.season.model_dump_json()
+
+                    top_scorers.append(df)
+
+            final_competition_top_scorers_df = pd.concat(top_scorers)
+                
+            # # Converte a colunas 'team' (se não for nula)
+            final_competition_top_scorers_df['team'] = final_competition_top_scorers_df['team'].apply(lambda x: json.dumps(x, default=str) if isinstance(x, dict) else None)
+            final_competition_top_scorers_df['player'] = final_competition_top_scorers_df['player'].apply(lambda x: json.dumps(x, default=str) if isinstance(x, dict) else None)
+
+            load_timesamp = datetime.datetime.now(datetime.timezone.utc).isoformat() 
+            
+            metadata = {
+                "load_timestamp": [load_timesamp] * len(final_competition_top_scorers_df),
+            }
+
+            metadata_df = pd.DataFrame(metadata, index=final_competition_top_scorers_df.index)
+
+            df_with_metadata = pd.concat([final_competition_top_scorers_df, metadata_df], axis=1)
+        
+            # df_with_metadata.to_csv('competition_top_scorers', index=False)
+            self.logger.info(f"Writing to Database - {self.table}:")
+            self._write_to_db(df_with_metadata)
 
 
 

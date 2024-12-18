@@ -54,16 +54,16 @@ class Team(BaseModel):
     short_name: str = Field(..., alias='shortName')
     tla: str
     crest: str
-    address: str
-    website: Optional[str]
-    founded: Optional[int]
-    club_colors: Optional[str] = Field(..., alias='clubColors')
-    venue: Optional[str]
+    address: str = None
+    website: Optional[str] = None
+    founded: Optional[int] = None
+    club_colors: Optional[str] = Field(None, alias='clubColors')
+    venue: Optional[str] = None
     running_competitions: Optional[List[RunningCompetition]] = Field(None, alias='runningCompetitions')
     coach: Optional[Coach] = None
     squad: Optional[List[SquadMember]] = None
     staff: Optional[List[dict]] = None # Adicione um modelo específico para staff, se necessário
-    last_updated: datetime = Field(..., alias='lastUpdated')
+    last_updated: Optional[datetime] = Field(None, alias='lastUpdated')
 
 # Modelo para a competição
 class Competition(BaseModel):
