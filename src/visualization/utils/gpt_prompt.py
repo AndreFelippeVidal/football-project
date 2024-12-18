@@ -18,6 +18,7 @@ def generate_gpt_prompt(df_results, table_name):
 
     Be concise, only apply more context if requested.
     Always start your answer with the tabular report, and apply any other thing after.
+    Your answer should be small and formal as a business presentation.
     """
     return prompt
 
@@ -25,7 +26,7 @@ def get_gpt_report(message):
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a specialist in data quality."},
+            {"role": "system", "content": "You are a specialist in data quality. We are building a football data app based on football-api.org."},
             {"role": "user", "content": message},
         ],
         max_tokens=500,

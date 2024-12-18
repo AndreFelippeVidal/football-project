@@ -134,6 +134,23 @@ project/
 8. ~~ Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow~~
 9. ~~Gerar documentação com mkdocs? (the build is failing because the repo is private, once moved to public it will work)~~
 10. Buscar mais dados na API pra suportar mais dashboards no streamlit (matches, scores, desempenho na temporada, estisticas de jogadores são algumas ideias, mas tem que buscar essas informações na api, o que temos até agora já está no dashboard.)
-10.1 -> Adicionar os novos modelos de players e running comeptitions no airflow e testar
-11. Implementar greatExpectations se possível
-12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria ia responder.
+~~10.1 -> Adicionar os novos modelos do dbt de players e running comeptitions no airflow e testar (Automaticamente gerado pelo dbt integrado ao cosmos)~~ 
+11. Implementar greatExpectations se possível (TBD)
+12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria ia responder. (TBD)
+~~13. Colocar uma aba no streamlit com o open ai para fazer um monitoramento de data quality de cada tabela e a openai sugerir soluções.~~
+
+
+
+Novas requests que podem ser implementadas para analises no dashboard:
+Get the league table for Eredivisie:
+https://api.football-data.org/v4/competitions/{id}/standings
+
+See best 10 scorers of Italy's top league (scorers subresource defaults to limit=10):
+https://api.football-data.org/v4/competitions/SA/scorers
+
+
+See todays' matches of your subscribed competitions:
+https://api.football-data.org/v4/matches
+
+See all upcoming matches for Real Madrid:
+https://api.football-data.org/v4/teams/86/matches?status=SCHEDULED
