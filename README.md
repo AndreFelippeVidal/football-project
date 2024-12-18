@@ -134,5 +134,6 @@ project/
 8. ~~ Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow~~
 9. ~~Gerar documentação com mkdocs? (the build is failing because the repo is private, once moved to public it will work)~~
 10. Buscar mais dados na API pra suportar mais dashboards no streamlit (matches, scores, desempenho na temporada, estisticas de jogadores são algumas ideias, mas tem que buscar essas informações na api, o que temos até agora já está no dashboard.)
+10.1 -> Adicionar os novos modelos de players e running comeptitions no airflow e testar
 11. Implementar greatExpectations se possível
 12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria ia responder.
