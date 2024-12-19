@@ -15,7 +15,7 @@ raw_football_competitions_standings as (
         competition_id,
 
         ---------- Normalized Columns
-        team->>'id' as team_id,
+        cast(team->>'id' as integer) as team_id,
         team->>'tla' as team_tla,
         team->>'short_name' as team_short_name,
         team->>'crest' as team_crest,

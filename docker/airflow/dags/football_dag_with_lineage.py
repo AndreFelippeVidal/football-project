@@ -93,58 +93,50 @@ def futebol_pipeline_with_lineage() -> None:
         outlets=[api_competitions]
     )
 
-    # Defina a task DockerOperator
     docker_task_teams = DockerOperator(
-        task_id='run_football_pipeline_teams',  # Nome da task
-        image='football_image',     # Nome da imagem Docker local
+        task_id='run_football_pipeline_teams',  
+        image='football_image',    
         api_version='auto',
-        auto_remove=True,  # Remove o container após a execução
-        command='poetry run python /src/main.py --request_type teams',   # Comando para rodar o código Python no container
-        docker_url='unix://var/run/docker.sock',  # Conexão com o Docker local
-        network_mode='bridge',            # Definindo o modo de rede do Docker
-        #volumes=['/src:/src'],  # Montando o diretório local para o container
+        auto_remove=True, 
+        command='poetry run python /src/main.py --request_type teams',   
+        docker_url='unix://var/run/docker.sock',  
+        network_mode='bridge',         
         environment=environment_vars,
         outlets=[api_teams]
     )
 
-    # Defina a task DockerOperator
     docker_task_matches_today = DockerOperator(
-        task_id='run_football_pipeline_matches_today',  # Nome da task
-        image='football_image',     # Nome da imagem Docker local
+        task_id='run_football_pipeline_matches_today',  
+        image='football_image',    
         api_version='auto',
-        auto_remove=True,  # Remove o container após a execução
-        command='poetry run python /src/main.py --request_type matches_today',   # Comando para rodar o código Python no container
-        docker_url='unix://var/run/docker.sock',  # Conexão com o Docker local
-        network_mode='bridge',            # Definindo o modo de rede do Docker
-        #volumes=['/src:/src'],  # Montando o diretório local para o container
+        auto_remove=True,  
+        command='poetry run python /src/main.py --request_type matches_today', 
+        docker_url='unix://var/run/docker.sock',  
+        network_mode='bridge',            
         environment=environment_vars,
         outlets=[api_matches_today]
     )
 
-    # Defina a task DockerOperator
     docker_task_competitions_standings = DockerOperator(
-        task_id='run_football_pipeline_competitions_standings',  # Nome da task
-        image='football_image',     # Nome da imagem Docker local
+        task_id='run_football_pipeline_competitions_standings', 
+        image='football_image',    
         api_version='auto',
-        auto_remove=True,  # Remove o container após a execução
-        command='poetry run python /src/main.py --request_type competitions_standings',   # Comando para rodar o código Python no container
-        docker_url='unix://var/run/docker.sock',  # Conexão com o Docker local
-        network_mode='bridge',            # Definindo o modo de rede do Docker
-        #volumes=['/src:/src'],  # Montando o diretório local para o container
+        auto_remove=True,  
+        command='poetry run python /src/main.py --request_type competitions_standings',   
+        docker_url='unix://var/run/docker.sock',
+        network_mode='bridge',           
         environment=environment_vars,
         outlets=[api_competitions_standings]
     )
     
-    # Defina a task DockerOperator
     docker_task_competitions_top_scorers = DockerOperator(
-        task_id='run_football_pipeline_competitions_top_scorers',  # Nome da task
-        image='football_image',     # Nome da imagem Docker local
+        task_id='run_football_pipeline_competitions_top_scorers', 
+        image='football_image',  
         api_version='auto',
-        auto_remove=True,  # Remove o container após a execução
-        command='poetry run python /src/main.py --request_type competitions_top_scorers',   # Comando para rodar o código Python no container
-        docker_url='unix://var/run/docker.sock',  # Conexão com o Docker local
-        network_mode='bridge',            # Definindo o modo de rede do Docker
-        #volumes=['/src:/src'],  # Montando o diretório local para o container
+        auto_remove=True,  
+        command='poetry run python /src/main.py --request_type competitions_top_scorers',  
+        docker_url='unix://var/run/docker.sock',  
+        network_mode='bridge',           
         environment=environment_vars,
         outlets=[api_competitions_top_scorers]
     )
