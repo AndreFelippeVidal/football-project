@@ -19,10 +19,10 @@ COPY ../pyproject.toml ../poetry.lock ./
 RUN poetry config virtualenvs.create false && poetry install --no-root --only app
 
 # Copie o restante do código da aplicação
-COPY ./src/visualization/app.py .
+COPY ./src/visualization ./visualization
 
 # Exponha a porta padrão do Streamlit
 EXPOSE 8501
 
 # Comando para rodar o Streamlit
-CMD ["poetry", "run", "streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["poetry", "run", "streamlit", "run", "visualization/app_v2.py", "--server.port=8501", "--server.address=0.0.0.0"]
