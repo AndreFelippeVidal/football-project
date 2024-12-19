@@ -11,3 +11,7 @@ sources:
         description: Tabela com o relacionamento de todos os times que participaram de cada uma das competições disponibilidadas para a chave free da API
       - name: matches_today
         description: Tabela com todos os jogos que irão acontecer ou aconteceram no dia que ela foi carregada.
+      - name: competitions_top_scorers
+        description: Tabela com os artilheiros de cada competição disponível, separados por temporada.
+      - name: competitions_standings
+        description: Tabela com todos as tabelas de classificação disponíveis, separadas por temporada.

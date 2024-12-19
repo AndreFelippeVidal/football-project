@@ -148,6 +148,7 @@ project/
 15. Criar uma task na DAG no Airflow para exportar relatórios para o MinIO. (Artilheiros de cada campeonato/temporada? Times por competições)
 
 
-Extra:
-See all upcoming matches for Real Madrid: -- API blocked the access at this endpoint. To be further investigated.
+## Known Issues:
+1. There are issues with group stage competitions that needs further investigation.
+2. See all upcoming matches for Real Madrid: -- API blocked the access at this endpoint. To be further investigated.
 https://api.football-data.org/v4/teams/86/matches?status=SCHEDULED
