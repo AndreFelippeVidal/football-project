@@ -100,6 +100,29 @@ CREATE TABLE {schema}.{table} (
 );
 """
 
+TEAMS_UPCOMING_MATCHES = """
+CREATE TABLE {schema}.{table} (
+    area JSONB, 
+    competition JSONB, 
+    season JSONB, 
+    id BIGINT PRIMARY KEY,
+    utc_date TIMESTAMP WITH TIME ZONE,
+    status VARCHAR(50),
+    matchday INT, 
+    stage VARCHAR(50),
+    which_group VARCHAR(50), 
+    last_updated TIMESTAMP WITH TIME ZONE,
+    home_team JSONB, 
+    away_team JSONB, 
+    score JSONB, 
+    odds JSONB,
+    referees JSONB, 
+    date_from DATE,
+    date_to DATE,
+    load_timestamp TIMESTAMP WITH TIME ZONE
+);
+"""
+  
 TRUNCATE_TABLE = """
 truncate table {schema}.{table};
 """

@@ -37,6 +37,27 @@ api_teams = Table(
     extra={'dataSource':'football-org.api'}
 )
 
+api_matches_today = Table(
+    cluster="postgres://dpg-ct4ike9u0jms73a8mtf0-a.oregon-postgres.render.com:5432",
+    database="football_db_v5as",
+    name="raw.matches_today",
+    extra={'dataSource':'football-org.api'}
+)
+
+api_competitions_standings = Table(
+    cluster="postgres://dpg-ct4ike9u0jms73a8mtf0-a.oregon-postgres.render.com:5432",
+    database="football_db_v5as",
+    name="raw.competitions_standings",
+    extra={'dataSource':'football-org.api'}
+)
+
+api_competitions_top_scorers = Table(
+    cluster="postgres://dpg-ct4ike9u0jms73a8mtf0-a.oregon-postgres.render.com:5432",
+    database="football_db_v5as",
+    name="raw.competitions_top_scorers",
+    extra={'dataSource':'football-org.api'}
+)
+
 results = Table(
     cluster="postgres://dpg-ct4ike9u0jms73a8mtf0-a.oregon-postgres.render.com:5432",
     database="football_db_v5as",
@@ -85,7 +106,49 @@ def futebol_pipeline_with_lineage() -> None:
         environment=environment_vars,
         outlets=[api_teams]
     )
+
+    # Defina a task DockerOperator
+    docker_task_matches_today = DockerOperator(
+        task_id='run_football_pipeline_matches_today',  # Nome da task
+        image='football_image',     # Nome da imagem Docker local
+        api_version='auto',
+        auto_remove=True,  # Remove o container após a execução
+        command='poetry run python /src/main.py --request_type matches_today',   # Comando para rodar o código Python no container
+        docker_url='unix://var/run/docker.sock',  # Conexão com o Docker local
+        network_mode='bridge',            # Definindo o modo de rede do Docker
+        #volumes=['/src:/src'],  # Montando o diretório local para o container
+        environment=environment_vars,
+        outlets=[api_matches_today]
+    )
+
+    # Defina a task DockerOperator
+    docker_task_competitions_standings = DockerOperator(
+        task_id='run_football_pipeline_competitions_standings',  # Nome da task
+        image='football_image',     # Nome da imagem Docker local
+        api_version='auto',
+        auto_remove=True,  # Remove o container após a execução
+        command='poetry run python /src/main.py --request_type competitions_standings',   # Comando para rodar o código Python no container
+        docker_url='unix://var/run/docker.sock',  # Conexão com o Docker local
+        network_mode='bridge',            # Definindo o modo de rede do Docker
+        #volumes=['/src:/src'],  # Montando o diretório local para o container
+        environment=environment_vars,
+        outlets=[api_competitions_standings]
+    )
     
+    # Defina a task DockerOperator
+    docker_task_competitions_top_scorers = DockerOperator(
+        task_id='run_football_pipeline_competitions_top_scorers',  # Nome da task
+        image='football_image',     # Nome da imagem Docker local
+        api_version='auto',
+        auto_remove=True,  # Remove o container após a execução
+        command='poetry run python /src/main.py --request_type competitions_top_scorers',   # Comando para rodar o código Python no container
+        docker_url='unix://var/run/docker.sock',  # Conexão com o Docker local
+        network_mode='bridge',            # Definindo o modo de rede do Docker
+        #volumes=['/src:/src'],  # Montando o diretório local para o container
+        environment=environment_vars,
+        outlets=[api_competitions_top_scorers]
+    )
+
     dbt_transformations = DbtTaskGroup(
         group_id="dbt_football_project",
         project_config=ProjectConfig(football),
@@ -113,8 +176,9 @@ def futebol_pipeline_with_lineage() -> None:
         )
 
 
-    docker_task_competitions >> docker_task_teams 
-    docker_task_teams >> dbt_transformations >> dbt_marts >> query_table
+    docker_task_competitions >> docker_task_teams >> docker_task_matches_today
+    docker_task_matches_today >> docker_task_competitions_top_scorers >> docker_task_competitions_standings
+    docker_task_competitions_standings >> dbt_transformations >> dbt_marts >> query_table
     
 
 futebol_pipeline_with_lineage()

@@ -55,16 +55,27 @@ class Match(BaseModel):
     odds: Optional[Dict[str, str]]
     referees: List[Referee]
 
-# Modelo para representar o conjunto de resultados
 class ResultSet(BaseModel):
     count: int
     competitions: str
     first: date
     last: date
     played: int
+    wins: int = None
+    draws: int = None
+    losses: int = None
+
+class Filters(BaseModel):
+    date_from: date = Field(None, alias='dateFrom')
+    date_to: date = Field(None, alias='dateTo')
+    permission: str = None
+    competitions: str = None
+    permission: str =  None
+    status: List[str] = None
+    limit: int = None
 
 # Modelo principal que representa a resposta da API
 class MatchesTodayResponse(BaseModel):
-    filters: Dict[str, str]
+    filters: Filters#Dict[str, str]
     result_set: ResultSet = Field(..., alias='resultSet')
     matches: List[Match]

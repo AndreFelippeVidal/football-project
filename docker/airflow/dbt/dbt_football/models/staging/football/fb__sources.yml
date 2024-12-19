@@ -9,3 +9,5 @@ sources:
         description: Tabela com todas as competições disponibilizadas para a chave free da API
       - name: teams
         description: Tabela com o relacionamento de todos os times que participaram de cada uma das competições disponibilidadas para a chave free da API
+      - name: matches_today
+        description: Tabela com todos os jogos que irão acontecer ou aconteceram no dia que ela foi carregada.

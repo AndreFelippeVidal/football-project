@@ -13,7 +13,7 @@ import time
 from utils.processor import Processor
 from utils.database import Database
 from utils.queries import create_queries 
-from contracts.matches_today_contract import MatchesTodayResponse
+from contracts.matches_contract import MatchesTodayResponse
 
 
 pd.set_option('display.max_colwidth', None)
@@ -84,7 +84,7 @@ class MatchesProcessor(Processor):
         # Convertendo para dicionário e depois criando o DataFrame
         matches_dict = [comp.model_dump() for comp in match_data.matches]
         df = pd.DataFrame(matches_dict)
-        df['date_from'] = match_data.filters['dateFrom']
+        df['date_from'] = match_data.filters.date_from
 
         matches_data.append(df)
 

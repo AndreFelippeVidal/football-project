@@ -5,7 +5,7 @@
 
 ## Descrição do Projeto
 
-Este projeto é um portfólio para demonstrar habilidades como engenheiro de dados, cobrindo o ciclo completo de dados: **ingestão, transformação, orquestração, armazenamento, visualização e governança**. Utilizamos tecnologias modernas e práticas recomendadas da indústria, incluindo **Docker**, **Airflow**, **Python** com **Poetry**, **PostgreSQL**, **dbt**, **Streamlit**, **MinIO**, **MkDocs**, **Great Expectations**, e **OpenLineage**.
+Este projeto é um portfólio para demonstrar habilidades como engenheiro de dados, cobrindo o ciclo completo de dados: **extração, ingestão, transformação, orquestração, armazenamento, visualização e governança**. Utilizamos tecnologias modernas e práticas recomendadas da indústria, incluindo **Docker**, **Airflow**, **Python** com **Poetry**, **PostgreSQL**, **dbt**, **Streamlit**, **MinIO**, **MkDocs**, **Great Expectations**, **Logfire** e **OpenLineage**.
 
 ---
 
@@ -36,6 +36,8 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 6. **Documentação**:  
    Usar **MkDocs** com o tema **Material for MkDocs** para documentar o projeto, incluindo detalhes técnicos, arquitetura e instruções de uso.
 
+7. **Observalidade**:
+   Usar **Logfire** como ferramenta de observalidade para monitorar o ambiente.
 ---
 
 ## Tecnologias Utilizadas
@@ -45,11 +47,12 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
 - **Transformação**: dbt (Data Build Tool)  
 - **Banco de Dados**: PostgreSQL  
 - **Visualização**: Streamlit  
-- **Armazenamento**: MinIO (simulação de S3)  
+- **Armazenamento de Relatórios**: MinIO (simulação de S3)  
 - **Containerização**: Docker e Docker Compose  
 - **Validação de Dados**: Great Expectations ou Pandera  
 - **Linhagem de Dados**: OpenLineage integrado ao Airflow  
 - **Documentação**: MkDocs (Material for MkDocs)
+- **Observabilidade**: Logfire
 
 ---
 
@@ -76,6 +79,7 @@ Este projeto é um portfólio para demonstrar habilidades como engenheiro de dad
    ~~- Usar Great Expectations para validar os dados no pipeline (esquema, tipos de dados, valores duplicados).~~
    - Adicionar contratos de dados com Pydantic para processamentos e qualidade dos dados em Python.
    - Implementar data lineage com open lineage e marquez. Para subir o docker do marquez, navegar até `docker/marquez` e executar: `./docker/up.sh`
+   - Usando o taskpi na pasta root: `task run_marquez`, pode ser acessado no: `http://localhost:3000/`
 
 5. **Visualização e Relatórios**:
    - Desenvolver um dashboard com Streamlit que exibe métricas calculadas.
@@ -133,27 +137,17 @@ project/
 7. ~~rodar dbt no airflow com cosmos (rever jornada de dados)~~
 8. ~~ Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow~~
 9. ~~Gerar documentação com mkdocs? (the build is failing because the repo is private, once moved to public it will work)~~
-10. Buscar mais dados na API pra suportar mais dashboards no streamlit (matches, scores, desempenho na temporada, estisticas de jogadores são algumas ideias, mas tem que buscar essas informações na api, o que temos até agora já está no dashboard.)
+10. Buscar mais dados na API pra suportar mais dashboards no streamlit (matches, scores, desempenho na temporada, estisticas de jogadores são algumas ideias, mas tem que buscar essas informações na api, o que temos até agora já está no dashboard.) 
+- Adicionar aba de competições no streamlit com a tabela, artilheiro e outras estatísticas se possível, com filtro de temporada de competição. (dados na raw, precisa criar processo dbt)
+- A home do streamlit vai ser os jogos do dia atual. (dados na raw, precisa criar processo dbt)
 ~~10.1 -> Adicionar os novos modelos do dbt de players e running comeptitions no airflow e testar (Automaticamente gerado pelo dbt integrado ao cosmos)~~ 
 11. Implementar greatExpectations se possível (TBD)
 12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria IA responder. (TBD)
 ~~13. Colocar uma aba no streamlit com o open ai para fazer um monitoramento de data quality de cada tabela e a openai sugerir soluções.~~
 14. Observabilidade com logfire
+15. Criar uma task na DAG no Airflow para exportar relatórios para o MinIO. (Artilheiros de cada campeonato/temporada? Times por competições)
 
 
-
-Novas requests que podem ser implementadas para analises no dashboard:
-Get the league table for Eredivisie:
-https://api.football-data.org/v4/competitions/{id}/standings  -- Added to RAW
-
-See best 10 scorers of Italy's top league (scorers subresource defaults to limit=10): -- Added to Raw
-https://api.football-data.org/v4/competitions/SA/scorers
-
-
-See todays' matches of your subscribed competitions: -- Streamlit home? -- Added to Raw
-https://api.football-data.org/v4/matches
-
-See all upcoming matches for Real Madrid:
+Extra:
+See all upcoming matches for Real Madrid: -- API blocked the access at this endpoint. To be further investigated.
 https://api.football-data.org/v4/teams/86/matches?status=SCHEDULED
-
-Pending to add the airflow part for all these new requests and also add their lineage to be handled by openLineage before dbt. 
