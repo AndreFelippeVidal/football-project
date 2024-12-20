@@ -7,6 +7,8 @@
 
 Este projeto é um portfólio para demonstrar habilidades como engenheiro de dados, cobrindo o ciclo completo de dados: **extração, ingestão, transformação, orquestração, armazenamento, visualização e governança**. Utilizamos tecnologias modernas e práticas recomendadas da indústria, incluindo **Docker**, **Airflow**, **Python** com **Poetry**, **PostgreSQL**, **dbt**, **Streamlit**, **MinIO**, **MkDocs**, **Great Expectations**, **Logfire** e **OpenLineage**.
 
+Note: Focused on prototyping many different tools to understand its usage, not building the best and fastest process at all.
+
 ---
 
 ## Fluxo Geral
@@ -137,15 +139,16 @@ project/
 7. ~~rodar dbt no airflow com cosmos (rever jornada de dados)~~
 8. ~~ Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow~~
 9. ~~Gerar documentação com mkdocs? (the build is failing because the repo is private, once moved to public it will work)~~
-10. Buscar mais dados na API pra suportar mais dashboards no streamlit (matches, scores, desempenho na temporada, estisticas de jogadores são algumas ideias, mas tem que buscar essas informações na api, o que temos até agora já está no dashboard.) 
-- Adicionar aba de competições no streamlit com a tabela, artilheiro e outras estatísticas se possível, com filtro de temporada de competição. (dados na raw, precisa criar processo dbt)
-- A home do streamlit vai ser os jogos do dia atual. (dados na raw, precisa criar processo dbt)
+~~10. Buscar mais dados na API pra suportar mais dashboards no streamlit (matches, scores, desempenho na temporada, estisticas de jogadores são algumas ideias, mas tem que buscar essas informações na api, o que temos até agora já está no dashboard.) ~~
+~~- Adicionar aba de competições no streamlit com a tabela, artilheiro e outras estatísticas se possível, com filtro de temporada de competição. (dados na raw, precisa criar processo dbt)~~
+~~- A home do streamlit vai ser os jogos do dia atual. (dados na raw, precisa criar processo dbt)~~
 ~~10.1 -> Adicionar os novos modelos do dbt de players e running comeptitions no airflow e testar (Automaticamente gerado pelo dbt integrado ao cosmos)~~ 
 11. Implementar greatExpectations se possível (TBD)
 12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria IA responder. (TBD)
 ~~13. Colocar uma aba no streamlit com o open ai para fazer um monitoramento de data quality de cada tabela e a openai sugerir soluções.~~
-14. Observabilidade com logfire
+~~14. Observabilidade com logfire~~
 15. Criar uma task na DAG no Airflow para exportar relatórios para o MinIO. (Artilheiros de cada campeonato/temporada? Times por competições)
+16. Refazer README e redocumentar python com docstrings e mkdocs.
 
 
 ## Known Issues:

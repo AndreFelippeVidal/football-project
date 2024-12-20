@@ -110,7 +110,7 @@ class MatchesProcessor(Processor):
 
         df_with_metadata = pd.concat([final_matches_df, metadata_df], axis=1)
    
-        df_with_metadata.to_csv('matches_today', index=False)
+        # df_with_metadata.to_csv('matches_today', index=False)
         self.logger.info(f"Writing to Database - {self.table}:")
         self._write_to_db(df_with_metadata)
 

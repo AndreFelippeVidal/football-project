@@ -1,7 +1,11 @@
 import abc
 import logging
+import logfire
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+#logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configuração Logfire
+logfire.configure()
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', handlers=[logfire.LogfireLoggingHandler()])
 
 class Processor(abc.ABC):
     def __init__(self, api_connection, processor_name) -> None:

@@ -1,9 +1,20 @@
 import click
+import logfire
+import logging
 from utils.competitions_api import CompetitionsAPI, CompetitionsProcessor, CompetitionsDetailsProcessor
 from utils.teams_api import TeamsAPI, TeamsProcessor, TeamUpcomingMatchesProcessor
 from utils.matches_api import MatchesAPI, MatchesProcessor
 from contracts.teams_contract import TeamsResponse
 from dotenv import load_dotenv
+
+
+# Configuração Logfire
+logfire.configure()
+logging.basicConfig(handlers=[logfire.LogfireLoggingHandler()])
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logfire.instrument_requests()
+logfire.instrument_psycopg()
 
 load_dotenv()
 
