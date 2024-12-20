@@ -8,6 +8,18 @@ services:
     environment:
       - AIRFLOW__CORE__DAG_DIR_LIST_INTERVAL=10  # Intervalo de verificação de diretórios em segundos
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__METRICS__OTEL_ON=True
+      - AIRFLOW__METRICS__OTEL_HOST=logfire-api.pydantic.dev
+      - AIRFLOW__METRICS__OTEL_PORT=443
+      - AIRFLOW__METRICS__OTEL_PREFIX=airflow
+      - AIRFLOW__METRICS__OTEL_INTERVAL_MILLISECONDS=30000
+      - AIRFLOW__METRICS__OTEL_SSL_ACTIVE=True
+      - AIRFLOW__TRACES__OTEL_ON=True
+      - AIRFLOW__TRACES__OTEL_HOST=logfire-api.pydantic.dev
+      - AIRFLOW__TRACES__OTEL_PORT=443
+      - AIRFLOW__TRACES__OTEL_PREFIX=True
+      - AIRFLOW__TRACES__OTEL_SSL_ACTIVE=True
+      - AIRFLOW__TRACES__OTEL_TASK_LOG_EVENT=True
     
   scheduler:
     volumes:
@@ -18,6 +30,18 @@ services:
     environment:
       - AIRFLOW__CORE__DAG_DIR_LIST_INTERVAL=10  # Intervalo de verificação de diretórios em segundos
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__METRICS__OTEL_ON=True
+      - AIRFLOW__METRICS__OTEL_HOST=logfire-api.pydantic.dev
+      - AIRFLOW__METRICS__OTEL_PORT=443
+      - AIRFLOW__METRICS__OTEL_PREFIX=airflow
+      - AIRFLOW__METRICS__OTEL_INTERVAL_MILLISECONDS=30000
+      - AIRFLOW__METRICS__OTEL_SSL_ACTIVE=True
+      - AIRFLOW__TRACES__OTEL_ON=True
+      - AIRFLOW__TRACES__OTEL_HOST=logfire-api.pydantic.dev
+      - AIRFLOW__TRACES__OTEL_PORT=443
+      - AIRFLOW__TRACES__OTEL_PREFIX=True
+      - AIRFLOW__TRACES__OTEL_SSL_ACTIVE=True
+      - AIRFLOW__TRACES__OTEL_TASK_LOG_EVENT=True
   
 #   minio:
 #     image: 'minio/minio:latest'
