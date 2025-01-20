@@ -12,6 +12,9 @@ Note: Focused on prototyping various tools to understand their usage, not on bui
 
 ## General Workflow
 
+### Overall Architecture
+![Architecture](images/football-api-architecture.png)
+
 0. Data Source: <https://www.football-data.org/>
 
 1. **Data Ingestion**:  
