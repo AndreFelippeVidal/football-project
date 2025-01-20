@@ -17,6 +17,10 @@ airflow:
     - variable_name: PG_USER
       variable_value: <YOUR_USER>
     - variable_name: PG_PASS
-      variable_value: <YOUR_PASSWORD>
+      variable_value: <YOUR_PASS>
     - variable_name: PG_PORT
-      variable_value: 5432
+      variable_value: <YOUR_PORT>
+    - variable_name: PG_SCHEMA
+      variable_value: raw
+    - variable_name: PG_THREADS
+      variable_value: 1

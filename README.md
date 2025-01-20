@@ -1,129 +1,146 @@
- 
 # FOOTBALL PROJECT
 
 ---
 
-## Descrição do Projeto
+## Project Description
 
-Este projeto é um portfólio para demonstrar habilidades como engenheiro de dados, cobrindo o ciclo completo de dados: **extração, ingestão, transformação, orquestração, armazenamento, visualização e governança**. Utilizamos tecnologias modernas e práticas recomendadas da indústria, incluindo **Docker**, **Airflow**, **Python** com **Poetry**, **PostgreSQL**, **dbt**, **Streamlit**, **MinIO**, **MkDocs**, **Great Expectations**, **Logfire** e **OpenLineage**.
+This project serves as a portfolio to demonstrate data engineering skills, covering the complete data lifecycle: **extraction, ingestion, transformation, orchestration, storage, visualization, and governance**. It leverages modern technologies and industry best practices, including **Docker**, **Airflow**, **Python** with **Poetry**, **PostgreSQL**, **dbt**, **Streamlit**, **MinIO (not yet)**, **MkDocs**, **Logfire**, and **OpenLineage**.
 
-Note: Focused on prototyping many different tools to understand its usage, not building the best and fastest process at all.
+Note: Focused on prototyping various tools to understand their usage, not on building the best and fastest processes.
 
 ---
 
-## Fluxo Geral
+## General Workflow
 
-1. **Ingestão de Dados**:  
-   Obter dados de uma API pública de futebol e armazenar em um banco PostgreSQL.
+1. **Data Ingestion**:  
+   Fetch data from a public football API and store it in a PostgreSQL database. [API Extraction Docs](githubpages)
 
-2. **Transformação de Dados**:  
-   Processar os dados com **Python** e utilizar **dbt** para organizar as camadas do Data Warehouse (staging, intermediate, mart).
+2. **Data Transformation**:  
+   Process the data using **Python** and **dbt** to organize the Data Warehouse layers (staging, intermediate, mart).
 
-3. **Orquestração**:  
-   Usar o **Airflow** para gerenciar o pipeline de dados. O Airflow chamará **imagens Docker personalizadas** para processar os dados.
-   Note: Estaremos utilizando a versao do astronomer. terá de ser baixado para facilitar o processo.
-   Note2: no arquivo airflow settings configurado pelo astronomer, inclua sua api_key, e as configurações do postgres, como seu .env
-   ```variables:
+3. **Orchestration**:  
+   Use **Airflow** to manage the data pipeline. Airflow will invoke **custom Docker images** to process the data.  
+   Note: We use the Astronomer version for simplicity; download it to streamline the process.  
+   Note2: In the airflow settings file configured by Astronomer, include your API key and PostgreSQL settings in the `airflow_settings.yaml` file:  
+   ```yaml
+   variables:
     - variable_name: API_KEY
       variable_value: <YOUR API KEY>
-    ```
-    Note: change astro postgres port: `astro config set postgres.port 5435`
+   ```
+   A sample fale was added: `sample_airflow_settings.yml`
+   Info: I've Changed Astro PostgreSQL port: `astro config set postgres.port 5435`
+   There is also an `sample.env` that needs to be configured with the token for logfire.
 
-4. **Governança e Qualidade**:  
-   Validar os dados utilizando **Great Expectations** (ou **Pandera**) para garantir conformidade com o esquema e qualidade.
+4. **Governance and Quality**:  
+   - Open Metadata as a data catalog and data governance tool, with the aditional data quality integrations. (Not ready)
+   - For Data Quality apply data contracts with pydantic.
 
-5. **Visualização e Relatórios**:  
-   Criar dashboards interativos com **Streamlit** e exportar relatórios para o **MinIO**.
+5. **Visualization and Reporting**:  
+   Create interactive dashboards with **Streamlit** and export reports to **MinIO**.
 
-6. **Documentação**:  
-   Usar **MkDocs** com o tema **Material for MkDocs** para documentar o projeto, incluindo detalhes técnicos, arquitetura e instruções de uso.
+6. **Documentation**:  
+   Use **MkDocs** with the **Material for MkDocs** theme to document the project, including technical details, architecture, and usage instructions.
 
-7. **Observalidade**:
-   Usar **Logfire** como ferramenta de observalidade para monitorar o ambiente.
----
-
-## Tecnologias Utilizadas
-
-- **Orquestração**: Apache Airflow  
-- **Processamento**: Python (com Poetry, Pydantic, Pandera)  
-- **Transformação**: dbt (Data Build Tool)  
-- **Banco de Dados**: PostgreSQL  
-- **Visualização**: Streamlit  
-- **Armazenamento de Relatórios**: MinIO (simulação de S3)  
-- **Containerização**: Docker e Docker Compose  
-- **Validação de Dados**: Great Expectations ou Pandera  
-- **Linhagem de Dados**: OpenLineage integrado ao Airflow  
-- **Documentação**: MkDocs (Material for MkDocs)
-- **Observabilidade**: Logfire
+7. **Observability**:  
+   Use **Logfire** as an observability tool to monitor the environment.
 
 ---
 
-## Etapas do Desenvolvimento
+## Technologies Used
 
-1. **Configuração Inicial**:
-   - Configurar o ambiente local com Docker Compose para gerenciar os serviços (Airflow, MinIO).
-   - Criar um servidor postgres (Neste caso hospedamos no render pela simplicidade e ser grátis)
-   - Criar um repositório Git para versionar o código e usar GitHub Actions para CI/CD.
-
-2. **Ingestão de Dados**:
-   - Criar um DAG no Airflow que se conecta à API de futebol para baixar dados e armazenar em um banco PostgreSQL.
-   - Configurar o Airflow para usar o `DockerOperator` e chamar containers Python personalizados.
-
-3. **Transformação de Dados**:
-   - Configurar dbt para criar tabelas de staging, camada intermediária e marts no PostgreSQL.
-   - Criar queries para calcular métricas como número de gols, desempenho por time, etc.
-   Note: Para exportar as variáveis de ambiente para que o dbt consiga utilizar, é necessário utilizar o comando abaixo:
-   `export $(cat .env | xargs)`
-   ~~Note2: A primeira vez executando o pipeline do zero, é valido rodar um dbt run para criar todas as views/tableas primeiro na tabela final, pois existem relações entre as tabelas que podem falhar no pipeline caso todas não existam ainda. Pode-se executar local antes de subir para rodar via airflow.~~ (Fixed)
-
-
-4. **Governança e Qualidade**:
-   - Adicionar contratos de dados com Pydantic para processamentos e qualidade dos dados em Python.
-   - Implementar data lineage com open lineage e marquez. 
-      a. Para subir o docker do marquez, navegar até `docker/marquez` e executar: `./docker/up.sh`
-      b. Usando o taskpi na pasta root: `task run_marquez`, pode ser acessado no: `http://localhost:3000/`
-
-5. **Visualização e Relatórios**:
-   - Desenvolver um dashboard com Streamlit que exibe métricas calculadas.
-   Note: Para executar o streamlit são necessários dois passos:
-    1. Criar a imagem estando na raiz do projeto: `docker build -f docker/streamlit/Dockerfile -t streamlit-app .`
-    2. Executar a imagem e acessar via `localhost:8501`: `docker run --env-file .env -p 8501:8501 streamlit-app`
-   - Criar uma task na DAG no Airflow para exportar relatórios para o MinIO.
-
-6. **Documentação**:
-   - Usar MkDocs para documentar:
-     - Arquitetura do projeto.
-     - Tecnologias utilizadas.
-     - Fluxo de dados.
-     - Configuração e execução.
-   - Adicionar a documentação gerada automaticamente pelo código Python utilizando o `mkdocstrings`.
-
-7. **Containerização**:
-    - Adicionar automatção com taskipy para buildar imagens docker: `task build_docker_images`
+- **Orchestration**: Apache Airflow  
+- **Processing**: Python (with Poetry, Pydantic)  
+- **Transformation**: dbt (Data Build Tool)  
+- **Database**: PostgreSQL  
+- **Visualization**: Streamlit  
+- **Report Storage**: MinIO (S3 simulation)
+- **Containerization**: Docker and Docker Compose  
+- **Data Validation**: TBD  
+- **Data Lineage**: OpenLineage integrated with Airflow  
+- **Documentation**: MkDocs (Material for MkDocs)  
+- **Observability**: Logfire
 
 ---
+
+## How to Run
+
+### Pre-requisites
+1. Docker
+2. Python `3.12.15`
+3. Poetry
+4. Astro CLI
+5. Postgres Database - I choose to create one using Render for **Free** that would be easier to connect and to handle.
+6. [Logfire Account](https://logfire.pydantic.dev/login)
+
+### Running Steps (Mac Os)
+**Note:** before anything else, update all `.env` files.
+   a. on root folder `./`
+   b. on airflow folder `docker/airflow/` (`.env` and `airflow_settings.yaml`)
+
+
+#### Starting the Environment
+Open terminal on the root folder of the project and type:
+1. `poetry shell && poetry install` - To open the poetry virtual env and install all library dependencies
+2. `task build_docker_images` - To generate the python code images
+3. `task start airflow` - To start airflow
+   a. `task restart_airflow` - To restart airflow if needed
+   b. `task stop_airflow` - To stop airflow if needed
+4. `task run_marquez` - This can be run in a different terminal window because it will keep running. It will start the marquez server to track the lineage for DataOps reasons.
+
+Once the entire environment is up you can access using the browser:
+1. Airflow: [Airflow UI](localhost:8080) - Monitoring and running the orchestration
+2. Marquez: [Marquez UI](localhost:3000) - Monitoring the data lineage
+3. Logfire: [Logfire UI](https://logfire.pydantic.dev/login) - Monitoring the pipeline healthy
+
+Starting the process:
+1. In airflow UI you need to turn the dag into active mode and this will automatically trigger the entire end-to-end process. DAG: `football_pipeline_with_lineage`
+
+Once it end successfully, you can use streamlit to visualize the data.
+On Terminal, root folder:
+1. `task run_streamlit` - To generate the server
+2. Navigate to [Streamlit UI](localhost:8501)
+
+### Useful Info
+1. To export the .env variables to your local poetry env and do local testing - On terminal:
+```bash
+export $(cat .env | xargs)
+```  
+This is useful for DBT checks.
+2. To check project python code documentation locally:
+First on terminal:
+```bash
+mkdocs serve
+```  
+then [MkDocs UI](http://127.0.0.1:8000/)
+
+---
+
 
 ## Estrutura de Diretórios
 
 ```plaintext
 project/                   
-├── dbt_football/            # Configuração e modelos dbt
-├── docker/                  # Dockerfiles para diferentes componentes
-│   ├── airflow/             # Configuração do Airflow
-│   │   ├── dags/            # DAGs do Airflow
-│   ├── streamlit/           # Dockerfile do streamlit
-│   ├── python/              # Dockerfile do código python
-├── docs/                    # Arquivos de documentação (MkDocs)
-├── src/                     # Código-fonte Python
-│   ├── contracts/           # Contratos de Dados
-│   ├── utils/               # Bibliotecas e utilitários de python
-│   ├── visualization/       # Código Streamlit
-│   ├── main.py              # Python main code
-├── tests/                   # Testes automatizados (pytest)
-├── .env                     # Environment Variables
-├── pytest.ini               # Minor Pytest configurations
-├── poetry.lock              # Gerado pelo Poetry
-└── pyproject.toml           # Configuração do Poetry
+├── docker/                   # Dockerfiles for different components
+│   ├── airflow/              # Airflow Configs
+│   │   ├── dags/             # Airflow DAGs
+│   │   ├── dbt/              # DBT folder
+|   │   │   ├── dbt_football/ # DBT configs and models
+│   ├── streamlit/            # Dockerfile do streamlit
+│   ├── python/               # Python code Dockerfile 
+│   ├── marquez/              # Marquez Dockerfiles
+├── docs/                     # Documentation Files (MkDocs)
+├── src/                      # Python Source Code
+│   ├── contracts/            # Data Contracts
+│   ├── utils/                # Python utilities and libraries
+│   ├── visualization/        # Streamlit Code
+│   ├── main.py               # Python main code
+├── tests/                    # Automated tests (pytest)
+├── .env                      # Environment Variables
+├── pytest.ini                # Minor Pytest configurations
+├── mkdocs.yml                # MKdocs Config
+├── README.md                 # Readme File
+├── poetry.lock               # Poetry lock
+└── pyproject.toml            # Poetry Config
 
 ```
 

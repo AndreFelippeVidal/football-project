@@ -47,3 +47,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.taskipy.tasks]
 build_docker_images = "docker build -f docker/python/Dockerfile -t football_image . && docker build -f docker/streamlit/Dockerfile -t streamlit-app ."
 run_marquez = "cd docker/marquez && ./docker/up.sh"
+start_airflow = "cd docker/airflow && astro dev start"
+stop_airflow = "cd docker/airflow && astro dev stop"
+restart_airflow = "cd docker/airflow && astro dev restart"
+run_streamlit = "docker run --env-file .env -p 8501:8501 streamlit-app"
