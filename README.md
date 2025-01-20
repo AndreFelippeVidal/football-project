@@ -12,8 +12,10 @@ Note: Focused on prototyping various tools to understand their usage, not on bui
 
 ## General Workflow
 
+0. Data Source: <https://www.football-data.org/>
+
 1. **Data Ingestion**:  
-   Fetch data from a public football API and store it in a PostgreSQL database. [API Extraction Docs](githubpages)
+   Fetch data from a public football API and store it in a PostgreSQL database. [API Extraction Code Docs](https://AndreFelippeVidal.github.io/football-project/)
 
 2. **Data Transformation**:  
    Process the data using **Python** and **dbt** to organize the Data Warehouse layers (staging, intermediate, mart).
@@ -188,7 +190,7 @@ project/
 https://api.football-data.org/v4/teams/86/matches?status=SCHEDULED
 
 ## Next Steps
-0. Refactor README and document python code with docstrings and mkdocs.
+~~0. Refactor README and document python code with docstrings and mkdocs.~~
 1. Implement data catalog with Open Metadata:
    a. Lineage can be added there and marquez can be removed.
    b. Some Data Quality can be implemented in a centralized place with Open Metadata.
