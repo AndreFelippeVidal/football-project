@@ -180,6 +180,7 @@ class Database:
             print(f"{len(records)} registros inseridos com sucesso!")
         except Exception as e:
             print(f"Erro ao inserir registros: {e}")
+            raise
 
 # Exemplo de uso
 if __name__ == "__main__":

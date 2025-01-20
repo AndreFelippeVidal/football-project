@@ -51,7 +51,7 @@ class Team(BaseModel):
     area: Optional[Area] = None
     id: int
     name: str
-    short_name: str = Field(..., alias='shortName')
+    short_name: Optional[str] = Field(None, alias='shortName')
     tla: str
     crest: str
     address: str = None

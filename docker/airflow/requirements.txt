@@ -3,3 +3,6 @@ apache-airflow-providers-docker
 astronomer-cosmos==1.7.1
 apache-airflow-providers-postgres==5.6.0
 apache-airflow-providers-openlineage==1.10.0
+openmetadata-ingestion
+# apache-airflow[http]
+dbt-postgres

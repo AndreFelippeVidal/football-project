@@ -230,9 +230,17 @@ class CompetitionsDetailsProcessor(Processor):
                     self.logger.info(f'Retrieving data for competition id: {competition_id}')
                     ## For Cup competitions like FIFA World Cup/UEFA Champions League/European Championship/Libertadores different logic is needed
                     if competition_id not in [2000,2001,2018,2152]:
-                        standing_data = CompetitionStandingsResponse(**self.api_connection.get_standings(competition_id=competition_id, season=season))
+                        try:
+                            standing_data = CompetitionStandingsResponse(**self.api_connection.get_standings(competition_id=competition_id, season=season))
+                        except Exception as e: 
+                            self.logger.error(f'Not able to retrieve data for competition_id: {competition_id} season: {season}. \nReason: {e}')
+                            continue
                     elif season == actual_year:
-                        standing_data = CompetitionStandingsResponse(**self.api_connection.get_standings(competition_id=competition_id))
+                        try:
+                            standing_data = CompetitionStandingsResponse(**self.api_connection.get_standings(competition_id=competition_id))
+                        except Exception as e: 
+                            self.logger.error(f'Not able to retrieve data for competition_id: {competition_id} season: {season}. \nReason: {e}')
+                            continue
                     else:
                         #self.logger.info(f"Something happened that didn't met for conditions")
                         continue
@@ -280,9 +288,17 @@ class CompetitionsDetailsProcessor(Processor):
                     self.logger.info(f'Retrieving data for competition id: {competition_id}')
                     ## For Cup competitions like FIFA World Cup/UEFA Champions League/European Championship/Libertadores different logic is needed
                     if competition_id not in [2000,2001,2018,2152]:
-                        top_scorer_data = TopScorersResponse(**self.api_connection.get_top_scorers(competition_id=competition_id, season=season))
+                        try:
+                            top_scorer_data = TopScorersResponse(**self.api_connection.get_top_scorers(competition_id=competition_id, season=season))
+                        except Exception as e: 
+                            self.logger.error(f'Not able to retrieve data for competition_id: {competition_id} season: {season}. \nReason: {e}')
+                            continue
                     elif season == actual_year:
-                        top_scorer_data = TopScorersResponse(**self.api_connection.get_top_scorers(competition_id=competition_id))
+                        try: 
+                            top_scorer_data = TopScorersResponse(**self.api_connection.get_top_scorers(competition_id=competition_id))
+                        except Exception as e: 
+                            self.logger.error(f'Not able to retrieve data for competition_id: {competition_id} season: {season}. \nReason: {e}')
+                            continue
                     else:
                         continue
                     # Convertendo para dicionário e depois criando o DataFrame

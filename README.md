@@ -78,10 +78,10 @@ Note: Focused on prototyping many different tools to understand its usage, not b
 
 
 4. **Governança e Qualidade**:
-   ~~- Usar Great Expectations para validar os dados no pipeline (esquema, tipos de dados, valores duplicados).~~
    - Adicionar contratos de dados com Pydantic para processamentos e qualidade dos dados em Python.
-   - Implementar data lineage com open lineage e marquez. Para subir o docker do marquez, navegar até `docker/marquez` e executar: `./docker/up.sh`
-   - Usando o taskpi na pasta root: `task run_marquez`, pode ser acessado no: `http://localhost:3000/`
+   - Implementar data lineage com open lineage e marquez. 
+      a. Para subir o docker do marquez, navegar até `docker/marquez` e executar: `./docker/up.sh`
+      b. Usando o taskpi na pasta root: `task run_marquez`, pode ser acessado no: `http://localhost:3000/`
 
 5. **Visualização e Relatórios**:
    - Desenvolver um dashboard com Streamlit que exibe métricas calculadas.
@@ -127,31 +127,18 @@ project/
 
 ```
 
-
-### NEXT STEPS
-
-1. ~~Pendente rodar o end-to-end de inserção até o banco no airflow. funcionando local~~
-2. ~~feito isso, criar o processo do competitions para o team, com contrato no pydantic até inserção no banco~~
-3. ~~ Limpar a main, tem muita coisa, jogar dentro de alguma função.~~
-4. ~~partir pro dbt visto que os dados já estão na raw.~~
-5. ~~Gerar algo no streamlit  básico para visualização.~~
-6. ~~Precisa tirar as variáveis do profiles e utilizar as variáveis de ambiente, testar antes de continuar com qualquer outra coisa~~
-7. ~~rodar dbt no airflow com cosmos (rever jornada de dados)~~
-8. ~~ Verificar com a ajuda do gpt para integrar o open lineage nessa estrutura do airflow~~
-9. ~~Gerar documentação com mkdocs? (the build is failing because the repo is private, once moved to public it will work)~~
-~~10. Buscar mais dados na API pra suportar mais dashboards no streamlit (matches, scores, desempenho na temporada, estisticas de jogadores são algumas ideias, mas tem que buscar essas informações na api, o que temos até agora já está no dashboard.) ~~
-~~- Adicionar aba de competições no streamlit com a tabela, artilheiro e outras estatísticas se possível, com filtro de temporada de competição. (dados na raw, precisa criar processo dbt)~~
-~~- A home do streamlit vai ser os jogos do dia atual. (dados na raw, precisa criar processo dbt)~~
-~~10.1 -> Adicionar os novos modelos do dbt de players e running comeptitions no airflow e testar (Automaticamente gerado pelo dbt integrado ao cosmos)~~ 
-11. Implementar greatExpectations se possível (TBD)
-12. Colocar uma aba no streamlit com o openai pra fazer perguntas sobre times e a propria IA responder. (TBD)
-~~13. Colocar uma aba no streamlit com o open ai para fazer um monitoramento de data quality de cada tabela e a openai sugerir soluções.~~
-~~14. Observabilidade com logfire~~
-15. Criar uma task na DAG no Airflow para exportar relatórios para o MinIO. (Artilheiros de cada campeonato/temporada? Times por competições)
-16. Refazer README e redocumentar python com docstrings e mkdocs.
-
-
 ## Known Issues:
 1. There are issues with group stage competitions that needs further investigation.
 2. See all upcoming matches for Real Madrid: -- API blocked the access at this endpoint. To be further investigated.
 https://api.football-data.org/v4/teams/86/matches?status=SCHEDULED
+
+## Next Steps
+0. Refactor README and document python code with docstrings and mkdocs.
+1. Implement data catalog with Open Metadata:
+   a. Lineage can be added there and marquez can be removed.
+   b. Some Data Quality can be implemented in a centralized place with Open Metadata.
+2. Integrate airflow with Minio to export reports to an like S3 bucket.
+3. Fix known issues with the cup competitions that have group stages and affect the process and the visualization. Known Issue #1
+4. Investigate known issue #2.
+5. Add more gen AI features
+   a. Create tab In Streamlit App with OpenAI to answer questions regarding the data.

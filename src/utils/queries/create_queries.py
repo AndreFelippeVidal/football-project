@@ -21,7 +21,7 @@ CREATE TABLE {schema}.{table} (
     competition_id INTEGER NOT NULL,
     team_id INTEGER NOT NULL,
     name VARCHAR(255) NOT NULL,
-    short_name VARCHAR(255) NOT NULL,
+    short_name VARCHAR(255),
     tla VARCHAR(255) NOT NULL,
     crest VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,

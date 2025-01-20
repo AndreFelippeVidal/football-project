@@ -84,7 +84,7 @@ def futebol_pipeline_with_lineage() -> None:
         task_id='run_footbal_pipeline_competitions',  # Nome da task
         image='football_image',     # Nome da imagem Docker local
         api_version='auto',
-        auto_remove=True,  # Remove o container após a execução
+        auto_remove='success',  # Remove o container após a execução
         command='poetry run python /src/main.py --request_type competitions',   # Comando para rodar o código Python no container
         docker_url='unix://var/run/docker.sock',  # Conexão com o Docker local
         network_mode='bridge',            # Definindo o modo de rede do Docker
@@ -97,7 +97,7 @@ def futebol_pipeline_with_lineage() -> None:
         task_id='run_football_pipeline_teams',  
         image='football_image',    
         api_version='auto',
-        auto_remove=True, 
+        auto_remove='success', 
         command='poetry run python /src/main.py --request_type teams',   
         docker_url='unix://var/run/docker.sock',  
         network_mode='bridge',         
@@ -109,7 +109,7 @@ def futebol_pipeline_with_lineage() -> None:
         task_id='run_football_pipeline_matches_today',  
         image='football_image',    
         api_version='auto',
-        auto_remove=True,  
+        auto_remove='success',  
         command='poetry run python /src/main.py --request_type matches_today', 
         docker_url='unix://var/run/docker.sock',  
         network_mode='bridge',            
@@ -121,7 +121,7 @@ def futebol_pipeline_with_lineage() -> None:
         task_id='run_football_pipeline_competitions_standings', 
         image='football_image',    
         api_version='auto',
-        auto_remove=True,  
+        auto_remove='success',  
         command='poetry run python /src/main.py --request_type competitions_standings',   
         docker_url='unix://var/run/docker.sock',
         network_mode='bridge',           
@@ -133,7 +133,7 @@ def futebol_pipeline_with_lineage() -> None:
         task_id='run_football_pipeline_competitions_top_scorers', 
         image='football_image',  
         api_version='auto',
-        auto_remove=True,  
+        auto_remove='success',  
         command='poetry run python /src/main.py --request_type competitions_top_scorers',  
         docker_url='unix://var/run/docker.sock',  
         network_mode='bridge',           

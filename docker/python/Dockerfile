@@ -16,7 +16,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 - && \
 WORKDIR /src
 
 # Copie o código do host para o container
-COPY ../pyproject.toml ../poetry.lock /
+COPY ./pyproject.toml ./poetry.lock /
 RUN poetry config virtualenvs.create false && poetry install --no-root
 
 COPY ./src /src

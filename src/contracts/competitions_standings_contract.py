@@ -23,7 +23,7 @@ class Season(BaseModel):
     id: int
     start_date: date = Field(..., alias="startDate")
     end_date: date = Field(..., alias="endDate")
-    current_matchday: int = Field(..., alias="currentMatchday")
+    current_matchday: Optional[int] = Field(None, alias="currentMatchday")
     winner: Optional[Team]
 
 # Modelo para representar um time na tabela

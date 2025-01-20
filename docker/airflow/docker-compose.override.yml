@@ -1,7 +1,12 @@
 version: "3.8"
 
 services:
+  postgres:
+    networks:
+      - app-external-network
   webserver:
+    networks:
+      - app-external-network
     volumes:
       - ./dags:/opt/airflow/dags
       - /var/run/docker.sock:/var/run/docker.sock
@@ -22,6 +27,8 @@ services:
       - AIRFLOW__TRACES__OTEL_TASK_LOG_EVENT=True
     
   scheduler:
+    networks:
+      - app-external-network
     volumes:
       - ./dags:/opt/airflow/dags
       - /var/run/docker.sock:/var/run/docker.sock
@@ -64,3 +71,5 @@ services:
 networks:
   airflow:
     driver: bridge
+  app-external-network:
+    external: True
