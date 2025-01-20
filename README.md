@@ -129,6 +129,7 @@ project/
 │   ├── python/               # Python code Dockerfile 
 │   ├── marquez/              # Marquez Dockerfiles
 ├── docs/                     # Documentation Files (MkDocs)
+├── images/                   # README Images
 ├── src/                      # Python Source Code
 │   ├── contracts/            # Data Contracts
 │   ├── utils/                # Python utilities and libraries
@@ -143,6 +144,37 @@ project/
 └── pyproject.toml            # Poetry Config
 
 ```
+
+### Workflow Images:
+
+**Orchestrator**
+
+![Orchestrator](images/Orchestrator.png)
+
+---
+
+**Data Quality - Open AI**
+
+![Dashboard Data Validation](images/Data%20Validation.png)
+![Dashboard Data Validation-2](images/Data%20Validation%202.png)
+
+---
+
+**Data Visualization Streamlit**
+
+![Today's Matches](images/Today's%20Matches.png)
+![Competitions Summary](images/Competitions%20Summary.png)
+![Competitions Statistics](images/Competitions%20Statistics.png)
+![Teams Summary](images/Teams%20Summary.png)
+![Teams Statistics](images/Teams%20Statistics.png)
+
+---
+
+**Data Ops - Open Lineage**
+
+![Data Lineage](images/Data%20Lineage.gif)
+
+---
 
 ## Known Issues:
 1. There are issues with group stage competitions that needs further investigation.
