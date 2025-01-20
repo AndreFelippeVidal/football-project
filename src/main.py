@@ -4,7 +4,6 @@ import logging
 from utils.competitions_api import CompetitionsAPI, CompetitionsProcessor, CompetitionsDetailsProcessor
 from utils.teams_api import TeamsAPI, TeamsProcessor, TeamUpcomingMatchesProcessor
 from utils.matches_api import MatchesAPI, MatchesProcessor
-from contracts.teams_contract import TeamsResponse
 from dotenv import load_dotenv
 
 
@@ -22,7 +21,7 @@ load_dotenv()
 @click.option('--request_type', type=click.Choice(['teams', 'teams_upcoming_matches', 'competitions','competitions_standings','competitions_top_scorers','matches_today'], case_sensitive=False), help="Tipo de requisição a ser feita")
 def main(request_type):
     """
-    Função principal que direciona a requisição com base no parâmetro passado via CLI.
+    Main function to map the request type from CLI to the actual process.
     """
     if request_type == 'teams':
         teams_api = TeamsAPI(token=None)
@@ -43,7 +42,7 @@ def main(request_type):
         teams_api = TeamsAPI(token=None)
         TeamUpcomingMatchesProcessor(teams_api,schema='raw', table='teams_upcoming_matches').process()
     else:
-        print("Tipo de requisição inválido!")
+        print("Request type invalid!")
 
 if __name__ == '__main__':
     main()

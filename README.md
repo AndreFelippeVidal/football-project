@@ -176,6 +176,12 @@ project/
 
 ---
 
+**Observability**
+
+![Observability](images/Observability.png)
+
+---
+
 ## Known Issues:
 1. There are issues with group stage competitions that needs further investigation.
 2. See all upcoming matches for Real Madrid: -- API blocked the access at this endpoint. To be further investigated.

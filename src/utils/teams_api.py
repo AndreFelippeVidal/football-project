@@ -1,6 +1,12 @@
 """
 This module provides classes for interacting with and processing team data 
-from a football API, including fetching team details and integrating them into a database.
+from a football API. It includes functionalities for fetching team details, 
+upcoming matches, and integrating this data into a database.
+
+Classes:
+    - TeamsAPI: Handles API interactions related to teams.
+    - TeamsProcessor: Processes and integrates team data into a database.
+    - TeamUpcomingMatchesProcessor: Processes upcoming match data for teams.
 """
 from utils.football_api import FootballAPIBase
 from typing import Dict, Any
@@ -23,8 +29,9 @@ class TeamsAPI(FootballAPIBase):
     Handles API interactions for fetching team-related data.
 
     Methods:
-        - get_teams: Fetches teams of a specific competition.
+        - get_teams: Fetches teams participating in a specific competition.
         - get_team_by_id: Fetches details of a specific team.
+        - get_team_upcoming_matches: Fetches upcoming matches of a team.
     """
     def get_teams(self, competition_id: int) -> Dict[str, Any]:
         """
@@ -55,10 +62,10 @@ class TeamsAPI(FootballAPIBase):
         Fetches upcoming matches of a specific team.
 
         Args:
-            team_id (int): The ID of the team to fetch details for.
+            team_id (int): The ID of the team to fetch matches for.
 
         Returns:
-            Dict[str, Any]: The API response containing the team's upcoming matches details.
+            Dict[str, Any]: The API response containing the team's upcoming match details.
         """
         return self._make_request(f"teams/{team_id}/matches?status=SCHEDULED&limit=10")
 
@@ -67,24 +74,27 @@ class TeamsProcessor(Processor):
     Processes and integrates team data from the API into the database.
 
     Attributes:
-        api_connection: The API connection used for fetching data.
-        competition_ids (list): List of competition IDs for which to process teams.
-        schema (str): Database schema to use.
-        table (str): Database table to insert data into.
+        api_connection (TeamsAPI): API connection for fetching data.
+        competition_ids (List[int]): List of competition IDs for processing.
+        schema (str): Database schema name.
+        table (str): Database table name.
 
     Methods:
         - process: Fetches, transforms, and loads team data into the database.
+        - _write_to_db: Writes processed data to the database.
     """
+
     def __init__(self, api_connection: TeamsAPI, competition_ids: list, schema = 'RAW', table = None):
         """
-        Initializes the TeamsProcessor.
+        Initializes the TeamsProcessor instance.
 
         Args:
-            api_connection: The API connection used for fetching data.
-            competition_ids (list): List of competition IDs to process.
-            schema (str, optional): The schema to use in the database. Defaults to 'RAW'.
-            table (str, optional): The table to insert data into. Defaults to None.
+            api_connection (TeamsAPI): The API connection instance.
+            competition_ids (List[int]): List of competition IDs to process.
+            schema (str, optional): Database schema name. Defaults to 'RAW'.
+            table (str, optional): Database table name. Defaults to None.
         """
+
         super().__init__(api_connection, self.__class__.__name__)
 
         if schema:
@@ -119,7 +129,7 @@ class TeamsProcessor(Processor):
         for competition_id in competition_ids:
             self.logger.info(f'Retrieving data for competition id: {competition_id}')
             team_data = TeamsResponse(**self.api_connection.get_teams(competition_id))
-            # Convertendo para dicionário e depois criando o DataFrame
+            # Converting into dict and then creating the Dataframe
             teams_dict = [comp.model_dump() for comp in team_data.teams]
             df = pd.DataFrame(teams_dict)
             df['competition_id'] = competition_id
@@ -128,7 +138,7 @@ class TeamsProcessor(Processor):
 
         final_competition_teams_df = pd.concat(teams_data)
         
-        # Converte as colunas 'area' e 'current_season' para JSON (se não forem nulas)
+        # Convert area and season coluns into json format (if they are not null)
         final_competition_teams_df['area'] = final_competition_teams_df['area'].apply(lambda x: json.dumps(x) if isinstance(x, dict) else None)
         final_competition_teams_df['squad'] = final_competition_teams_df['squad'].apply(lambda x: json.dumps([element for element in x if isinstance(element, dict)], default=str) if isinstance(x, list) else None)
         final_competition_teams_df['staff'] = final_competition_teams_df['staff'].apply(lambda x: json.dumps([element for element in x if isinstance(element, dict)], default=str) if isinstance(x, list) else None)
@@ -146,7 +156,7 @@ class TeamsProcessor(Processor):
 
         df_with_metadata = pd.concat([final_competition_teams_df, metadata_df], axis=1)
     
-        # Verificando o DataFrame
+        # Verifying the Dataframe
         # self.logger.info(df_with_metadata)
         self.logger.info(f"Writing to Database - {self.table}:")
         self._write_to_db(df_with_metadata)
@@ -163,7 +173,7 @@ class TeamsProcessor(Processor):
             schema=self.schema,
             table=self.table
         )
-        # Verificar e criar a tabela se necessário
+        # Verify and create the table if necessary
         self.db.validate_table_exists(self.schema, self.table, query)
         self.db.execute_query(
             create_queries.TRUNCATE_TABLE.format(
@@ -175,15 +185,15 @@ class TeamsProcessor(Processor):
 
 class TeamUpcomingMatchesProcessor(Processor):
     """
-    Processes and integrates team data from the API into the database.
+    Processes and integrates upcoming match data for teams into the database.
 
     Attributes:
-        api_connection: The API connection used for fetching data.
-        schema (str): Database schema to use.
-        table (str): Database table to insert data into.
+        api_connection (TeamsAPI): API connection for fetching match data.
+        schema (str): Database schema name.
+        table (str): Database table name.
 
     Methods:
-        - process: Fetches, transforms, and loads team data into the database.
+        - process: Fetches, transforms, and loads match data into the database.
     """
     def __init__(self, api_connection: TeamsAPI, schema = 'RAW', table = None):
         """
@@ -227,7 +237,7 @@ class TeamUpcomingMatchesProcessor(Processor):
         for team_id in teams_ids:
             self.logger.info(f'Retrieving data for team id: {team_id}')
             team_matches_data = MatchesTodayResponse(**self.api_connection.get_team_upcoming_matches(team_id))
-            # Convertendo para dicionário e depois criando o DataFrame
+            # Converting into dict and then creating the dataframe
             teams_matches_dict = [comp.model_dump() for comp in team_matches_data.matches]
             df = pd.DataFrame(teams_matches_dict)
             df['date_from'] = team_matches_data.filters.date_from
@@ -237,7 +247,7 @@ class TeamUpcomingMatchesProcessor(Processor):
 
         final_teams_matches_df = pd.concat(teams_matches_data)
         
-        # Converte as colunas 'area' e 'season' para JSON (se não forem nulas)
+        # Convert area and season coluns into json format (if they are not null)
         final_teams_matches_df['area'] = final_teams_matches_df['area'].apply(lambda x: json.dumps(x) if isinstance(x, dict) else None)
         final_teams_matches_df['competition'] = final_teams_matches_df['competition'].apply(lambda x: json.dumps(x) if isinstance(x, dict) else None)
         final_teams_matches_df['season'] = final_teams_matches_df['season'].apply(lambda x: json.dumps(x, default=str) if isinstance(x, dict) else None)
@@ -273,7 +283,7 @@ class TeamUpcomingMatchesProcessor(Processor):
             schema=self.schema,
             table=self.table
         )
-        # Verificar e criar a tabela se necessário
+        # Verify and create the table if necessary
         self.db.validate_table_exists(self.schema, self.table, query)
         self.db.execute_query(
             create_queries.TRUNCATE_TABLE.format(

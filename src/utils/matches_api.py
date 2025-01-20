@@ -29,8 +29,18 @@ class MatchesAPI(FootballAPIBase):
         """
         Retrieves all matches for your competition tier today.
 
+        Fetches match data from the football API and returns it in a dictionary format.
+
         Returns:
-            Dict[str, Any]: A dictionary containing match data.
+            Dict[str, Any]: A dictionary containing match data, with details of matches scheduled for today.
+
+        Example:
+            {
+                "matches": [
+                    {"match_id": 123, "home_team": "Team A", "away_team": "Team B", ...},
+                    {"match_id": 124, "home_team": "Team C", "away_team": "Team D", ...}
+                ]
+            }
         """
         return self._make_request(f"matches")
 
@@ -74,6 +84,21 @@ class MatchesProcessor(Processor):
         """
         Processes team data by fetching it from the API, transforming it, 
         and loading it into the database.
+
+        This method fetches match data for today, transforms it into a DataFrame, 
+        applies necessary transformations, and loads it into the specified database 
+        table along with metadata like load timestamp.
+
+        The method performs the following steps:
+        - Fetches match data using the API.
+        - Converts the data into a pandas DataFrame.
+        - Transforms relevant columns into JSON format.
+        - Adds a load timestamp column.
+        - Loads the final DataFrame into the database.
+
+        Example:
+            matches_processor = MatchesProcessor(api_connection=matches_api, schema='RAW', table='matches')
+            matches_processor.process()
         """
         self.logger.info(f"Start Processing - {self.table}")
 
@@ -118,8 +143,14 @@ class MatchesProcessor(Processor):
         """
         Writes the processed DataFrame to the database.
 
+        This method executes the necessary SQL queries to insert the data into the specified 
+        database table after validating that the table exists and truncating the existing data.
+
         Args:
             df (pd.DataFrame): The DataFrame to write to the database.
+
+        Raises:
+            Exception: If there is an issue with the database connection or query execution.
         """
 
         query = getattr(create_queries, self.table.upper()).format(

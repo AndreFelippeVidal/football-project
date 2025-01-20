@@ -23,6 +23,16 @@ pd.set_option('display.max_colwidth', None)
 class CompetitionsAPI(FootballAPIBase):
     """
     Handles API interactions for retrieving football competition data.
+
+    This class provides methods to fetch various data related to football competitions, 
+    such as competition details, matches, standings, and top scorers.
+
+    Methods:
+        get_competitions: Retrieves all available competitions based on a specified plan.
+        get_competition_by_id: Retrieves details for a specific competition by its ID.
+        get_matches: Retrieves all matches for a specific competition.
+        get_standings: Retrieves the standings for a specific competition and season.
+        get_top_scorers: Retrieves the top scorers for a specific competition and season.
     """
     def get_competitions(self, plan: str = "TIER_ONE") -> Dict[str, Any]:
         """
@@ -62,13 +72,14 @@ class CompetitionsAPI(FootballAPIBase):
 
     def get_standings(self, competition_id: int, season: int = None) -> Dict[str, Any]:
         """
-        Retrieves all matches for a specific competition.
+        Retrieves the standings for a specific competition.
 
         Args:
             competition_id (int): The unique ID of the competition.
+            season (int, optional): The season for which the standings are to be retrieved. If None, the current season is used.
 
         Returns:
-            Dict[str, Any]: A dictionary containing match data.
+            Dict[str, Any]: A dictionary containing the standings data.
         """
         if not season:
             return self._make_request(f"competitions/{competition_id}/standings")
@@ -81,6 +92,7 @@ class CompetitionsAPI(FootballAPIBase):
 
         Args:
             competition_id (int): The unique ID of the competition.
+            season (int, optional): The season for which the top scorers are to be retrieved. If None, the current season is used.
 
         Returns:
             Dict[str, Any]: A dictionary containing top scorers data.
@@ -93,14 +105,25 @@ class CompetitionsAPI(FootballAPIBase):
 class CompetitionsProcessor(Processor):
     """
     Processes competition data fetched from the API and stores it in a database.
+
+    This class is responsible for processing competition data by fetching it from the API,
+    transforming the data (e.g., converting to DataFrames), and loading it into a PostgreSQL database.
+
+    Attributes:
+        schema (str): The database schema where data will be stored. Default is 'RAW'.
+        table (str): The database table where data will be written. Default is None.
+
+    Methods:
+        process: Main method to fetch, transform, and load competition data.
+        _write_to_db: Writes the processed DataFrame to the specified database table.
     """
     def __init__(self, api_connection: CompetitionsAPI, schema = 'RAW', table = None):
         """
         Initializes the CompetitionsProcessor with the API connection and database details.
 
         Args:
-            api_connection: The API connection instance.
-            schema (str, optional): The database schema where data will be stored. Default is 'RAW'.
+            api_connection (CompetitionsAPI): The API connection instance for fetching competition data.
+            schema (str, optional): The database schema for storing the data. Default is 'RAW'.
             table (str, optional): The target database table. Default is None.
         """
         super().__init__(api_connection, self.__class__.__name__)
@@ -121,6 +144,9 @@ class CompetitionsProcessor(Processor):
     def process(self) -> None:
         """
         Processes competition data by fetching, transforming, and loading it into the database.
+
+        The method fetches data from the API, transforms it into a DataFrame, and writes the data 
+        to the specified database table, adding a timestamp for tracking purposes.
 
         Returns:
             None
@@ -179,15 +205,22 @@ class CompetitionsProcessor(Processor):
 
 class CompetitionsDetailsProcessor(Processor):
     """
-    Processes competition data fetched from the API and stores it in a database.
+    Processes competition details such as standings and top scorers and stores them in a database.
+
+    This class fetches and processes competition details, including standings and top scorers,
+    transforming the data into DataFrames and loading it into the PostgreSQL database.
+
+    Methods:
+        process: Main method to fetch, transform, and load competition details (standings/top scorers).
+        _write_to_db: Writes the processed DataFrame to the specified database table.
     """
     def __init__(self, api_connection: CompetitionsAPI, schema = 'RAW', table = None):
         """
-        Initializes the CompetitionsProcessor with the API connection and database details.
+        Initializes the CompetitionsDetailsProcessor with the API connection and database details.
 
         Args:
-            api_connection: The API connection instance.
-            schema (str, optional): The database schema where data will be stored. Default is 'RAW'.
+            api_connection (CompetitionsAPI): The API connection instance for fetching competition data.
+            schema (str, optional): The database schema for storing the data. Default is 'RAW'.
             table (str, optional): The target database table. Default is None.
         """
         super().__init__(api_connection, self.__class__.__name__)
@@ -207,7 +240,11 @@ class CompetitionsDetailsProcessor(Processor):
     
     def process(self) -> None:
         """
-        Processes competition data by fetching, transforming, and loading it into the database.
+        Processes competition data (standings/top scorers) by fetching, transforming, and loading it into the database.
+
+        Depending on the table name, the method retrieves competition standings or top scorers, 
+        processes them into DataFrames, and stores them in the PostgreSQL database, adding a 
+        load timestamp for tracking purposes.
 
         Returns:
             None

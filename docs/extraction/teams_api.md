@@ -1,12 +1,28 @@
 # Teams
 
-## API
+## Workflow (Processor + API)
 ```mermaid
 graph TD
-    A[TeamsAPI] --> B[get_teams]
-    A --> C[get_team_by_id]
-    B -->|Input: competition_id| D[Fetch Teams API Endpoint]
-    C -->|Input: team_id| E[Fetch Team Details API Endpoint]
+    A[Start]  --> C[TeamsProcessor]
+    C --> C1[process]
+    C1 --> C2[Fetch teams data from API]
+    C2 --> B[TeamsAPI]
+    B --> B1[get_teams]
+    B --> B2[get_team_by_id]
+    B --> B3[get_team_upcoming_matches]
+    B1 --> C3[Transform data using TeamsResponse]
+    B2 --> C3
+    B3 --> C3
+    C3 --> C4[Load data into database]
+    
+    A --> D[TeamUpcomingMatchesProcessor]
+    D --> D1[process]
+    D1 --> D2[Fetch upcoming matches from API]
+    D2 --> B
+    B1 --> D3[Transform match data using MatchesTodayResponse]
+    B2 --> D3
+    B3 --> D3
+    D3 --> D4[Load matches into database]
 
 ```
 
@@ -17,27 +33,6 @@ graph TD
             group_by_category: true
             members_order: source
 
-## Processor
-```mermaid
-graph TD
-    F[TeamsProcessor]
-    F --> G[__init__]
-    G -->|Input: api_connection, competition_ids, schema, table| H[Set Attributes]
-    F --> I[process]
-    I --> J[Log Start Processing]
-    I --> K[Fetch Competition IDs from DB]
-    K --> L[Loop For Each Competition ID]
-    L --> M[Fetch Teams from API]
-    M --> N[Transform API Response to DataFrame]
-    N --> O[Add Metadata Columns]
-    O --> P[Write to Database]
-    F --> Q[_write_to_db]
-    Q --> R[Validate or Create Table]
-    R --> S[Truncate Table]
-    S --> T[Bulk Insert DataFrame into DB]
-
-
-```
 ??? info "TeamsProcessor Class"
     ::: src.utils.teams_api.TeamsProcessor
         options:
@@ -45,8 +40,15 @@ graph TD
             group_by_category: true
             members_order: source
 
-<!-- ## Queries
-??? info "Create Queries"
+??? info "TeamsUpcomingMatchesProcessor Class"
+    ::: src.utils.teams_api.TeamUpcomingMatchesProcessor
+        options:
+            filters: []
+            group_by_category: true
+            members_order: source
+
+## Queries
+??? info "Create Queries - Schema"
     ```sql
-    --8<-- "src/data_sources/vendors/hgi/queries/hgi_create_queries.py"
-    ``` -->
+    --8<-- "src/utils/queries/create_queries.py"
+    ```
