@@ -188,7 +188,7 @@ project/
 https://api.football-data.org/v4/teams/86/matches?status=SCHEDULED
 
 ## Next Steps
-0. Refactor README and document python code with docstrings and mkdocs.
+~~0. Refactor README and document python code with docstrings and mkdocs.~~
 1. Implement data catalog with Open Metadata:
    a. Lineage can be added there and marquez can be removed.
    b. Some Data Quality can be implemented in a centralized place with Open Metadata.
