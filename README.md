@@ -32,7 +32,7 @@ Note: Focused on prototyping various tools to understand their usage, not on bui
     - variable_name: API_KEY
       variable_value: <YOUR API KEY>
    ```
-   A sample fale was added: `sample_airflow_settings.yml`
+   A sample file was added: `sample_airflow_settings.yml`
    Info: I've Changed Astro PostgreSQL port: `astro config set postgres.port 5435`
    There is also an `sample.env` that needs to be configured with the token for logfire.
 
@@ -121,7 +121,7 @@ then [MkDocs UI](http://127.0.0.1:8000/)
 ---
 
 
-## Estrutura de Diretórios
+## Directory Structure
 
 ```plaintext
 project/                   
